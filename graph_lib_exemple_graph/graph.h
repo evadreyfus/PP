@@ -90,7 +90,7 @@ class VertexInterface
     friend class EdgeInterface;
     friend class Graph;
 
-    private :
+   private :
 
         /// Les widgets de l'interface. N'oubliez pas qu'il ne suffit pas de déclarer
         /// ici un widget pour qu'il apparaisse, il faut aussi le mettre en place et
@@ -114,7 +114,10 @@ class VertexInterface
         // Une boite pour le label précédent
         grman::WidgetText m_box_label_idx;
 
-        //un bouton delete appartenant au sommet
+        //une boite contenant un bouton delete
+        grman::WidgetBox m_delete_box;
+
+        //image delete
         grman::WidgetImage m_delete;
 
     public :

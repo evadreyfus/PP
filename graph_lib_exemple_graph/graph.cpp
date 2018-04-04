@@ -41,14 +41,19 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
 
     m_box_label_idx.add_child( m_label_idx );
     m_label_idx.set_message( std::to_string(idx) );
+
 ///________________________________________________
 ///AJOUT DU BOUTON DELETE DANS CHAQUE SOMMET
 ///____________________________________________________
-    //Label de visualisation du bouton delete dans un sommet
-    m_top_box.add_child(m_delete);
-    m_delete.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down);
+    //declaration de la box contenant le bouton delete
+    m_top_box.add_child(m_delete_box);
+    m_delete_box.set_pos(50,110);
+    m_delete_box.set_dim(50,15);
+    m_delete_box.set_moveable();
+
+    //Ajout de la photo delete dans la box
+    m_delete_box.add_child(m_delete);
     m_delete.set_dim(5,5);
-    m_delete.set_bg_color(NOIR);
     m_delete.set_pic_name("delete.jpg");
 }
 
