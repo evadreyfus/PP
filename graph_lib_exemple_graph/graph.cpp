@@ -42,6 +42,23 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
     m_box_label_idx.add_child( m_label_idx );
     m_label_idx.set_message( std::to_string(idx) );
 
+<<<<<<< HEAD
+    ///________________________________________________
+///AJOUT DU BOUTON DELETE DANS CHAQUE SOMMET
+///____________________________________________________
+
+//declaration de la box contenant le bouton delete
+    m_top_box.add_child(m_delete_box);
+
+    m_delete_box.set_pos(50,110);
+    m_delete_box.set_dim(60,15);
+
+    m_delete.set_dim(50,15);
+
+     m_delete_image.set_pic_name("delete.jpg");
+    m_delete.add_child(m_delete_image);
+    m_delete_box.add_child(m_delete);
+=======
 ///________________________________________________
 ///AJOUT DU BOUTON DELETE DANS CHAQUE SOMMET
 ///____________________________________________________
@@ -54,7 +71,7 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
      m_delete_image.set_pic_name("delete.jpg");
     m_delete.add_child(m_delete_image);
     m_delete_box.add_child(m_delete);
-}
+
 
 
 /// Gestion du Vertex avant l'appel à l'interface
@@ -241,6 +258,7 @@ void Graph::update()
         if (elem.second.m_interface->m_delete.clicked())
     {
         cout <<"Suppression"<<endl;
+
     }
 
     for (auto &elt : m_vertices)
@@ -285,10 +303,11 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
     EdgeInterface *ei = new EdgeInterface(m_vertices[id_vert1], m_vertices[id_vert2]);
     m_interface->m_main_box.add_child(ei->m_top_edge);
     m_edges[idx] = Edge(weight, ei);
+
+
 }
 
 
-///Sauvegarde
 
 /// Enregistrer les sommets dans le fichier
 void Graph::save_vertex()
