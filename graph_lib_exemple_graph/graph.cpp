@@ -1,5 +1,7 @@
 #include "graph.h"
-
+#include <fstream>
+#include <string>
+using namespace std;
 /***************************************************
                     VERTEX
 ****************************************************/
@@ -9,7 +11,7 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
 {
     // La boite englobante
     m_top_box.set_pos(x, y);
-    m_top_box.set_dim(130, 100);
+    m_top_box.set_dim(130, 130);
     m_top_box.set_moveable();
 
     // Le slider de réglage de valeur
@@ -39,6 +41,15 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
 
     m_box_label_idx.add_child( m_label_idx );
     m_label_idx.set_message( std::to_string(idx) );
+///________________________________________________
+///AJOUT DU BOUTON DELETE DANS CHAQUE SOMMET
+///____________________________________________________
+    //Label de visualisation du bouton delete dans un sommet
+    m_top_box.add_child(m_delete);
+    m_delete.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down);
+    m_delete.set_dim(5,5);
+    m_delete.set_bg_color(NOIR);
+    m_delete.set_pic_name("delete.jpg");
 }
 
 
@@ -126,8 +137,6 @@ void Edge::post_update()
     m_weight = m_interface->m_slider_weight.get_value();
 }
 
-
-
 /***************************************************
                     GRAPH
 ****************************************************/
@@ -139,10 +148,10 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_top_box.set_dim(1000,740);
     m_top_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
 
-    m_top_box.add_child(m_tool_box);
+   m_top_box.add_child(m_tool_box);
     m_tool_box.set_dim(80,720);
     m_tool_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
-    m_tool_box.set_bg_color(BLANCBLEU);
+m_tool_box.set_bg_color(BLANCBLEU);
 
     m_top_box.add_child(m_main_box);
     m_main_box.set_dim(908,720);
@@ -156,36 +165,71 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
 /// de chargement de fichiers par exemple.
 /// Bien sûr on ne veut pas que vos graphes soient construits
 /// "à la main" dans le code comme ça.
+
+///________________________________________________________
+///        CREATION DU GRAPHE ET ARCS ENTRE SOMMETS
+///________________________________________________________
 void Graph::make_example()
 {
     m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
     // La ligne précédente est en gros équivalente à :
     // m_interface = new GraphInterface(50, 0, 750, 600);
 
-    /// Les sommets doivent être définis avant les arcs
-    // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
-    add_interfaced_vertex(0, 30.0, 200, 100, "clown1.jpg");
-    add_interfaced_vertex(1, 60.0, 400, 100, "clown2.jpg");
-    add_interfaced_vertex(2,  50.0, 200, 300, "clown3.jpg");
-    add_interfaced_vertex(3,  0.0, 400, 300, "clown4.jpg");
-    add_interfaced_vertex(4,  100.0, 600, 300, "clown5.jpg");
-    add_interfaced_vertex(5,  0.0, 100, 500, "bad_clowns_xx3xx.jpg", 0);
-    add_interfaced_vertex(6,  0.0, 300, 500, "bad_clowns_xx3xx.jpg", 1);
-    add_interfaced_vertex(7,  0.0, 500, 500, "bad_clowns_xx3xx.jpg", 2);
+    int m_sommet;
+    int m_poids;
+    int m_pos1;
+    int m_pos2;
+    string m_nom;
+    string image;
+    int m_edge;
+    int m_s1;
+    int m_s2;
+    int m_pe;
+bool apparition (true);
+   ifstream newfichier("sommets.txt", ios::in);
 
-    /// Les arcs doivent être définis entre des sommets qui existent !
-    // AJouter l'arc d'indice 0, allant du sommet 1 au sommet 2 de poids 50 etc...
-    add_interfaced_edge(0, 1, 2, 50.0);
-    add_interfaced_edge(1, 0, 1, 50.0);
-    add_interfaced_edge(2, 1, 3, 75.0);
-    add_interfaced_edge(3, 4, 1, 25.0);
-    add_interfaced_edge(4, 6, 3, 25.0);
-    add_interfaced_edge(5, 7, 3, 25.0);
-    add_interfaced_edge(6, 3, 4, 0.0);
-    add_interfaced_edge(7, 2, 0, 100.0);
-    add_interfaced_edge(8, 5, 2, 20.0);
-    add_interfaced_edge(9, 3, 7, 80.0);
+     if(newfichier)
+    {
+//on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
+
+
+    for(int i=0; i<14; i++)
+    {
+        newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
+        image= m_nom+".jpg";
+    // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
+
+        add_interfaced_vertex(m_sommet, m_poids, m_pos1,m_pos2, image);
+    }
+     newfichier.close();
+    }
+
+
+ifstream nouveaufichier("edge.txt", ios :: in);
+if(nouveaufichier)
+{
+    for (int i=0;i<21;i++)
+    {
+        nouveaufichier >>  m_edge >> m_s1 >> m_s2 >> m_pe;
+        add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
+    }
+     nouveaufichier.close();
 }
+/*
+for (int i=0; i<14;i++)
+{
+    if (m_bouton2.clicked())
+    {
+        apparition=false;
+
+    }
+}
+*/
+}
+
+
+
+
 
 /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
 void Graph::update()

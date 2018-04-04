@@ -1,0 +1,14 @@
+0 30 10 10 lion
+1 20 300 10 leopard
+2 10 600 10 guepard
+3 0 800 70 hyene
+4 100 20 250 buffle
+5 0 200 250 gnou
+6 0 370 300 phacochere
+7 0 550 300 zebre
+8 0 750 250 gazelle
+9 0 10 600 hippopotame
+10 0 10 450 fourmi
+11 0 400 600 vegetaux
+12 0 700 450 babouin
+13 0 700 600 elephant

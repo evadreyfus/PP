@@ -114,6 +114,9 @@ class VertexInterface
         // Une boite pour le label précédent
         grman::WidgetText m_box_label_idx;
 
+        //un bouton delete appartenant au sommet
+        grman::WidgetImage m_delete;
+
     public :
 
         // Le constructeur met en place les éléments de l'interface
