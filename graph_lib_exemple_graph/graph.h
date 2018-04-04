@@ -117,8 +117,11 @@ class VertexInterface
         //une boite contenant un bouton delete
         grman::WidgetBox m_delete_box;
 
-        //image delete
-        grman::WidgetImage m_delete;
+        //bouton delete
+      grman::WidgetButton m_delete;
+
+      //image delete
+         grman::WidgetImage m_delete_image;
 
     public :
 

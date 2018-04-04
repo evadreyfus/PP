@@ -49,13 +49,11 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
     //declaration de la box contenant le bouton delete
     m_top_box.add_child(m_delete_box);
     m_delete_box.set_pos(50,110);
-    m_delete_box.set_dim(50,15);
-    m_delete_box.set_moveable();
-
-    //Ajout de la photo delete dans la box
+    m_delete_box.set_dim(60,15);
+    m_delete.set_dim(50,15);
+     m_delete_image.set_pic_name("delete.jpg");
+    m_delete.add_child(m_delete_image);
     m_delete_box.add_child(m_delete);
-    m_delete.set_dim(5,5);
-    m_delete.set_pic_name("delete.jpg");
 }
 
 
@@ -238,6 +236,12 @@ void Graph::update()
         elt.second.pre_update();
 
     m_interface->m_top_box.update();
+
+    for(const auto& elem: m_vertices)
+        if (elem.second.m_interface->m_delete.clicked())
+    {
+        cout <<"Suppression"<<endl;
+    }
 
     for (auto &elt : m_vertices)
         elt.second.post_update();
