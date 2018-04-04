@@ -190,6 +190,7 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
 ///        CREATION DU GRAPHE ET ARCS ENTRE SOMMETS
 ///________________________________________________________
 
+
 void Graph::loadgraphe()
 {
     m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
@@ -202,17 +203,35 @@ void Graph::loadgraphe()
     int m_pos2;
     string m_nom;
     string image;
+    string fichier1, fichier2;
     int m_edge;
     int m_s1;
     int m_s2;
     int m_pe;
-    bool apparition (true);
-    ifstream newfichier("sommets.txt", ios::in);
+
+    if(m_choixGraphe == 1)
+    {
+        fichier1 = "sommet1.txt";
+        fichier2 = "edge1.txt";
+    }
+
+    if(m_choixGraphe == 2)
+    {
+        fichier1 = "sommet2.txt";
+        fichier2 = "edge2.txt";
+    }
+
+    if(m_choixGraphe == 3)
+    {
+        fichier1 = "sommet3.txt";
+        fichier2 = "edge3.txt";
+    }
+
+    ifstream newfichier(fichier1, ios::in);
 
     if(newfichier)
     {
-//on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
-
+        //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
 
         for(int i=0; i<14; i++)
         {
@@ -221,22 +240,23 @@ void Graph::loadgraphe()
             // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
 
             add_interfaced_vertex(m_sommet, m_poids, m_pos1,m_pos2, image);
-
         }
         newfichier.close();
     }
-
-
-    ifstream nouveaufichier("edge.txt", ios :: in);
+    else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
+cout<<"ok"<<endl;
+    ifstream nouveaufichier(fichier2, ios :: in);
     if(nouveaufichier)
     {
         for (int i=0; i<21; i++)
         {
-            nouveaufichier >>  m_edge >> m_s1 >> m_s2 >> m_pe;
+            nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe;
             add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
         }
         nouveaufichier.close();
     }
+    else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
+
 }
 
 
@@ -326,7 +346,9 @@ void Graph::save_vertex()
 
             std::string name = m_vertices[i].m_interface->m_img.get_pic_name();
             name.erase(name.end()-4, name.end());
-            newfichier << i << m_vertices[i].m_value << m_vertices[i].m_interface->m_top_box.get_posx() <<  m_vertices[i].m_interface->m_top_box.get_posy() << name << std::endl;
+            std::cout << m_vertices[i].m_value << " " << m_vertices[i].m_interface->m_top_box.get_posx() << " " <<  m_vertices[i].m_interface->m_top_box.get_posy() << " " << name << std::endl;
+
+            newfichier << i <<" " << m_vertices[i].m_value << " " << m_vertices[i].m_interface->m_top_box.get_posx() << " " <<  m_vertices[i].m_interface->m_top_box.get_posy() << " " << name << std::endl;
         }
         newfichier.close();
     }
@@ -354,7 +376,7 @@ void Graph::save_edge()
     {
         for(unsigned int i=0 ; i < m_edges.size() ; i++)
         {
-            nouveaufichier << i << m_edges[i].m_from <<  m_edges[i].m_to << m_edges[i].m_weight << std::endl;
+            nouveaufichier << i << " " << m_edges[i].m_from << " " << m_edges[i].m_to << " " << m_edges[i].m_weight << std::endl;
         }
         nouveaufichier.close();
     }
@@ -447,7 +469,7 @@ void Graph::test_remove_vertex(int vidx)
     if (m_interface && remver.m_interface)
         m_interface->m_main_box.remove_child (remver.m_interface->m_top_box);
 }
-void Graph::menu(Graph *g)
+void Graph::menu()
 {
     do
     {
@@ -456,5 +478,5 @@ void Graph::menu(Graph *g)
 
     } while((m_choixGraphe != 1) && (m_choixGraphe != 2) && (m_choixGraphe != 3));
 
-    g->loadgraphe();
+    loadgraphe();
 }

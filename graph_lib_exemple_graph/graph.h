@@ -340,7 +340,7 @@ class Graph
         void save_edge();
         void save_vertex();
         void Sauvegarde();
-        void menu(Graph *g);
+        void menu();
 
 };
 

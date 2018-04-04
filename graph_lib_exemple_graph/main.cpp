@@ -14,11 +14,7 @@ int main()
 
     /// Un exemple de graphe
     Graph g;
-    g.menu(&g);
-
-
-    //g.test_remove_edge(5);
-//g.suppression()
+    g.menu();
 
     /// Vous gardez la main sur la "boucle de jeu"
     /// ( contrairement à des frameworks plus avancés )
@@ -27,7 +23,9 @@ int main()
         /// Il faut appeler les méthodes d'update des objets qui comportent des widgets
         g.update();
 
- g.Supprimer();
+        g.Supprimer();
+        g.Sauvegarde();
+
         /// Mise à jour générale (clavier/souris/buffer etc...)
         grman::mettre_a_jour();
     }

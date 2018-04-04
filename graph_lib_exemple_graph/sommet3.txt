@@ -1,0 +1,14 @@
+0 30 6 6 lion
+1 20 296 6 leopard
+2 10 596 6 guepard
+3 0 796 66 hyene
+4 100 16 246 buffle
+5 0 196 246 gnou
+6 0 366 296 phacochere
+7 0 546 296 zebre
+8 0 746 246 gazelle
+9 0 6 596 hippopotame
+10 0 6 446 fourmi
+11 0 396 596 vegetaux
+12 0 696 446 babouin
+13 0 200 394 elephant
