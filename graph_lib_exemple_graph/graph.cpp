@@ -41,15 +41,22 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
 
     m_box_label_idx.add_child( m_label_idx );
     m_label_idx.set_message( std::to_string(idx) );
-///________________________________________________
+
+    ///________________________________________________
 ///AJOUT DU BOUTON DELETE DANS CHAQUE SOMMET
 ///____________________________________________________
-    //Label de visualisation du bouton delete dans un sommet
-    m_top_box.add_child(m_delete);
-    m_delete.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down);
-    m_delete.set_dim(5,5);
-    m_delete.set_bg_color(NOIR);
-    m_delete.set_pic_name("delete.jpg");
+
+//declaration de la box contenant le bouton delete
+    m_top_box.add_child(m_delete_box);
+
+    m_delete_box.set_pos(50,110);
+    m_delete_box.set_dim(60,15);
+
+    m_delete.set_dim(50,15);
+
+     m_delete_image.set_pic_name("delete.jpg");
+    m_delete.add_child(m_delete_image);
+    m_delete_box.add_child(m_delete);
 }
 
 
@@ -245,6 +252,12 @@ void Graph::update()
 
     m_interface->m_top_box.update();
 
+for(const auto& elem: m_vertices)
+    if (elem.second.m_interface->m_delete.clicked())
+    {
+        cout<<"ARGH"<<endl;
+    }
+
     for (auto &elt : m_vertices)
         elt.second.post_update();
 
@@ -287,5 +300,42 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
     EdgeInterface *ei = new EdgeInterface(m_vertices[id_vert1], m_vertices[id_vert2]);
     m_interface->m_main_box.add_child(ei->m_top_edge);
     m_edges[idx] = Edge(weight, ei);
+
+
+}
+
+/// Enregistrer les sommets dans le fichier
+void Graph::save_vertex()
+{
+    std::ofstream newfichier("sommets.txt", std::ios::out | std::ios::trunc);
+
+    if(newfichier)
+    {
+        for(unsigned int i=0 ; i < m_vertices.size() ; i++)
+        {
+
+            std::string name = m_vertices[i].m_interface->m_img.get_pic_name();
+            name.erase(name.end()-4 , name.end());
+            newfichier << i << m_vertices[i].m_value << m_vertices[i].m_interface->m_top_box.get_posx() <<  m_vertices[i].m_interface->m_top_box.get_posy() << name << std::endl;
+        }
+        newfichier.close();
+    }
+    else std::cout << "erreur lors de l'enregistrement" << std::endl;
+}
+
+/// Enregistrer les aretes dans le fichier
+void Graph::save_edge()
+{
+    std::ofstream nouveaufichier("edge.txt", std::ios::out | std::ios::trunc);
+
+    if(nouveaufichier)
+    {
+        for(unsigned int i=0 ; i < m_edges.size() ; i++)
+        {
+            nouveaufichier << i << m_edges[i].m_from <<  m_edges[i].m_to << m_edges[i].m_weight << std::endl;
+        }
+        nouveaufichier.close();
+    }
+    else std::cout << "erreur lors de l'enregistrement" << std::endl;
 }
 

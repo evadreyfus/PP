@@ -115,7 +115,11 @@ class VertexInterface
         grman::WidgetText m_box_label_idx;
 
         //un bouton delete appartenant au sommet
-        grman::WidgetImage m_delete;
+        grman::WidgetButton m_delete;
+ //une boite contenant un bouton delete
+        grman::WidgetBox m_delete_box;
+         //image delete
+        grman::WidgetImage m_delete_image;
 
     public :
 
@@ -311,6 +315,8 @@ class Graph
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
         void update();
+        void save_vertex();
+        void save_edge();
 };
 
 
