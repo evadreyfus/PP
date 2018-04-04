@@ -1,6 +1,5 @@
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
-
 /**************************************************************
     Ici sont proposées 3 classes fondamentales
             Vertex (=Sommet)
@@ -90,7 +89,7 @@ class VertexInterface
     friend class EdgeInterface;
     friend class Graph;
 
-   private :
+    private :
 
         /// Les widgets de l'interface. N'oubliez pas qu'il ne suffit pas de déclarer
         /// ici un widget pour qu'il apparaisse, il faut aussi le mettre en place et
@@ -114,34 +113,16 @@ class VertexInterface
         // Une boite pour le label précédent
         grman::WidgetText m_box_label_idx;
 
-<<<<<<< HEAD
-        //un bouton delete appartenant au sommet
-        grman::WidgetButton m_delete;
- //une boite contenant un bouton delete
-        grman::WidgetBox m_delete_box;
-         //image delete
-        grman::WidgetImage m_delete_image;
-=======
-        //une boite contenant un bouton delete
-        grman::WidgetBox m_delete_box;
 
-<<<<<<< HEAD
-        //bouton delete
-      grman::WidgetButton m_delete;
-
-      //image delete
-         grman::WidgetImage m_delete_image;
-=======
-        //image delete
-        grman::WidgetImage m_delete;
->>>>>>> 4b9d118a75b2877e616ad79f25ed489d6d094451
->>>>>>> f5c2d8280695ad9b6ce575d587f5e083fdbb1509
 
     public :
 
         // Le constructeur met en place les éléments de l'interface
         // voir l'implémentation dans le .cpp
         VertexInterface(int idx, int x, int y, std::string pic_name="", int pic_idx=0);
+                //void suppression();
+void suppression();
+
 };
 
 
@@ -286,21 +267,44 @@ class GraphInterface
         /// Dans cette boite seront ajoutés des boutons de contrôle etc...
         grman::WidgetBox m_tool_box;
 
-
         // A compléter éventuellement par des widgets de décoration ou
         // d'édition (boutons ajouter/enlever ...)
+
+        //une boite contenant un bouton delete
+        grman::WidgetBox m_delete_box;
+
+        //image delete
+        grman::WidgetImage m_delete_image;
+
+        //bouton DELETE
+        grman::WidgetButton m_delete;
+
+        //bouton SAVE
+        grman::WidgetButton m_sauv;
+
+
+        //une boite contenant un bouton sauv
+        grman::WidgetBox m_sauv_box;
+
+        //image sauvegarde
+        grman::WidgetImage m_sauv_image;
+
 
     public :
 
         // Le constructeur met en place les éléments de l'interface
         // voir l'implémentation dans le .cpp
         GraphInterface(int x, int y, int w, int h);
+
 };
 
 
 class Graph
 {
     private :
+
+        ///Choix du graphe
+        int m_choixGraphe;
 
         /// La "liste" des arêtes
         std::map<int, Edge> m_edges;
@@ -326,19 +330,20 @@ class Graph
         /// Voir implémentation dans le .cpp
         /// Cette méthode est à enlever et remplacer par un système
         /// de chargement de fichiers par exemple.
-        void make_example();
-
+        void loadgraphe();
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
         void update();
-<<<<<<< HEAD
-=======
-
-        ///Méthode pour enregristrer Vertex & Edge
->>>>>>> 4b9d118a75b2877e616ad79f25ed489d6d094451
-        void save_vertex();
+        void test_remove_edge(int eidx);
+        void test_remove_vertex(int vidx);
+        void Supprimer ();
         void save_edge();
+        void save_vertex();
+        void Sauvegarde();
+        void menu(Graph *g);
+
 };
+
 
 
 #endif // GRAPH_H_INCLUDED

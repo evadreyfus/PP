@@ -4,7 +4,7 @@
 	<fstream>
 	<string>
 
-1522852777 c:\users\sarah\desktop\pp\graph_lib_exemple_graph\graph.h
+1522836334 c:\users\sarah\desktop\pp\graph_lib_exemple_graph\graph.h
 	<vector>
 	<map>
 	<string>
@@ -23,7 +23,7 @@
 1522836235 c:\users\sarah\desktop\pp\graph_lib_exemple_graph\grman\coords.h
 	<cmath>
 
-1522852884 c:\users\sarah\desktop\pp\graph_lib_exemple_graph\grman\widget.h
+1522836235 c:\users\sarah\desktop\pp\graph_lib_exemple_graph\grman\widget.h
 	"grman.h"
 	<iostream>
 	<string>
@@ -112,4 +112,61 @@
 	"grman/grman.h"
 	<iostream>
 	"graph.h"
+
+1522835718 source:c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\grman\coords.cpp
+	"coords.h"
+
+1522835718 c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\grman\coords.h
+	<cmath>
+
+1522835718 source:c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\grman\grman.cpp
+	<cmath>
+	<unordered_map>
+	<unordered_set>
+	<utility>
+	<string>
+	<iostream>
+	<regex>
+	"grman.h"
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+
+1522835718 c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\grman\grman.h
+	<allegro.h>
+	<string>
+	"grman_couleurs.h"
+	"coords.h"
+	"widget.h"
+
+1522835718 c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\grman\grman_couleurs.h
+
+1522850591 c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\grman\widget.h
+	"grman.h"
+	<iostream>
+	<string>
+	<vector>
+	<algorithm>
+	<allegro.h>
+
+1522835718 source:c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\grman\widget.cpp
+	"widget.h"
+
+1522865473 source:c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\main.cpp
+	"grman/grman.h"
+	<iostream>
+	"graph.h"
+
+1522865545 c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\graph.h
+	<vector>
+	<map>
+	<string>
+	<memory>
+	"grman/grman.h"
+
+1522865644 source:c:\users\patrick dreyfus\desktop\pp - copie\graph_lib_exemple_graph\graph.cpp
+	"graph.h"
+	<fstream>
+	<string>
 

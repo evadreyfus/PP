@@ -5,6 +5,7 @@
 
 int main()
 {
+    int m_numsommet;
     /// A appeler en 1er avant d'instancier des objets graphiques etc...
     grman::init();
 
@@ -13,8 +14,11 @@ int main()
 
     /// Un exemple de graphe
     Graph g;
-    g.make_example();
+    g.menu(&g);
 
+
+    //g.test_remove_edge(5);
+//g.suppression()
 
     /// Vous gardez la main sur la "boucle de jeu"
     /// ( contrairement à des frameworks plus avancés )
@@ -23,6 +27,7 @@ int main()
         /// Il faut appeler les méthodes d'update des objets qui comportent des widgets
         g.update();
 
+ g.Supprimer();
         /// Mise à jour générale (clavier/souris/buffer etc...)
         grman::mettre_a_jour();
     }
@@ -32,5 +37,4 @@ int main()
     return 0;
 }
 END_OF_MAIN();
-
 
