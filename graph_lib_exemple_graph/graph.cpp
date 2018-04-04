@@ -45,6 +45,7 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
 ///________________________________________________
 ///AJOUT DU BOUTON DELETE DANS CHAQUE SOMMET
 ///____________________________________________________
+
     //declaration de la box contenant le bouton delete
     m_top_box.add_child(m_delete_box);
     m_delete_box.set_pos(50,110);
@@ -220,20 +221,8 @@ if(nouveaufichier)
     }
      nouveaufichier.close();
 }
-/*
-for (int i=0; i<14;i++)
-{
-    if (m_bouton2.clicked())
-    {
-        apparition=false;
 
-    }
 }
-*/
-}
-
-
-
 
 
 /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
@@ -294,3 +283,40 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
     m_edges[idx] = Edge(weight, ei);
 }
 
+
+///Sauvegarde
+
+/// Enregistrer les sommets dans le fichier
+void Graph::save_vertex()
+{
+    std::ofstream newfichier("sommets.txt", std::ios::out | std::ios::trunc);
+
+    if(newfichier)
+    {
+        for(unsigned int i=0 ; i < m_vertices.size() ; i++)
+        {
+
+            std::string name = m_vertices[i].m_interface->m_img.get_pic_name();
+            name.erase(name.end()-4 , name.end());
+            newfichier << i << m_vertices[i].m_value << m_vertices[i].m_interface->m_top_box.get_posx() <<  m_vertices[i].m_interface->m_top_box.get_posy() << name << std::endl;
+        }
+        newfichier.close();
+    }
+    else std::cout << "erreur lors de l'enregistrement" << std::endl;
+}
+
+/// Enregistrer les aretes dans le fichier
+void Graph::save_edge()
+{
+    std::ofstream nouveaufichier("edge.txt", std::ios::out | std::ios::trunc);
+
+    if(nouveaufichier)
+    {
+        for(unsigned int i=0 ; i < m_edges.size() ; i++)
+        {
+            nouveaufichier << i << m_edges[i].m_from <<  m_edges[i].m_to << m_edges[i].m_weight << std::endl;
+        }
+        nouveaufichier.close();
+    }
+    else std::cout << "erreur lors de l'enregistrement" << std::endl;
+}

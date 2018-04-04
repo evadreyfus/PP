@@ -314,6 +314,10 @@ class Graph
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
         void update();
+
+        ///Méthode pour enregristrer Vertex & Edge
+        void save_vertex();
+        void save_edge();
 };
 
 
