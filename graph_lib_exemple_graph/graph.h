@@ -282,12 +282,20 @@ class GraphInterface
         //bouton SAVE
         grman::WidgetButton m_sauv;
 
-
         //une boite contenant un bouton sauv
         grman::WidgetBox m_sauv_box;
 
         //image sauvegarde
         grman::WidgetImage m_sauv_image;
+
+        //Boite contenant le bouton add
+        grman::WidgetBox m_add_box;
+
+        //image du bouton add
+        grman::WidgetImage m_add_image;
+
+        //bouton ADD
+        grman::WidgetButton m_add;
 
 
     public :
@@ -341,9 +349,12 @@ class Graph
         void save_vertex();
         void Sauvegarde();
         void menu();
+        void Add_Edge();
+        void Ajouter();
 
 };
 
 
 
 #endif // GRAPH_H_INCLUDED
+
