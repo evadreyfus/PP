@@ -289,6 +289,15 @@ class GraphInterface
         //image sauvegarde
         grman::WidgetImage m_sauv_image;
 
+        //Boite contenant le bouton add
+        grman::WidgetBox m_add_box;
+
+        //image du bouton add
+        grman::WidgetImage m_add_image;
+
+        //bouton ADD
+        grman::WidgetButton m_add;
+
 
     public :
 
@@ -342,6 +351,8 @@ class Graph
         void Sauvegarde();
         void menu();
         void boucleJeu();
+        void Add_Edge();
+        void Ajouter();
 
 
 };

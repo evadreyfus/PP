@@ -176,6 +176,15 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_sauv.add_child(m_sauv_image);
     m_sauv_box.add_child(m_sauv);
 
+     //Déclaration de la box contenant le boutin add
+    m_tool_box.add_child(m_add_box);
+    m_add_box.set_pos(-10,600);
+    m_add_box.set_dim(100,100);
+    m_add.set_dim(50,15);
+    m_add_image.set_pic_name("add.jpg");
+    m_add.add_child(m_add_image);
+    m_add_box.add_child(m_add);
+
 
 }
 
@@ -221,10 +230,10 @@ void Graph::loadgraphe(int m_choixgraphe)
     if(newfichier)
     {
         //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
-        newfichier >> nbSommets;
-        std::cout << nbSommets << std::endl;
+      //  newfichier >> nbSommets;
+      //  std::cout << nbSommets << std::endl;
 
-        for(unsigned int i=0; i<14; i++)
+        for(unsigned int i=0; i<3; i++)
         {
             newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
             std::cout << " " << m_sommet << " " << m_poids << " " << m_pos1 << " " << m_pos2 << " " << m_nom;
@@ -240,9 +249,9 @@ void Graph::loadgraphe(int m_choixgraphe)
     ifstream nouveaufichier(fichier2, ios :: in);
     if(nouveaufichier)
     {
-        nouveaufichier >> nbEdges;
+       // nouveaufichier >> nbEdges;
 
-        for (int i=0; i<nbEdges; i++)
+        for (int i=0; i<4; i++)
         {
             nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe;
             add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
@@ -363,6 +372,7 @@ void Graph::update()
 
     Sauvegarde();
     Supprimer();
+    Ajouter();
 
 }
 
@@ -504,6 +514,53 @@ void Graph::Sauvegarde()
         save_vertex();
     }
 }
+void Graph::Ajouter()
+{
+    m_interface->m_top_box.update();
+    if(m_interface->m_add.clicked())
+    {
+        Add_Edge();
+    }
+}
+
+void Graph::Add_Edge()
+{
+    int n=0, som1, som2;
+    int poids;
+    bool x=false;
+
+    do
+    {
+        if (m_edges.count(n)==1)
+        {
+            n++;
+        }
+        else
+        {
+            x=true;
+        }
+    }
+    while(!x);
+
+    do
+    {
+        std::cout<<"Choisir votre sommet 1 : " <<std::endl;
+        std::cin>> som1;
+        std::cout << "Choisir votre sommet 2 : " <<std::endl;
+        std::cin >> som2;
+    }
+    while((som1==som2));
+
+    do
+    {
+        std::cout<< "Quel poids voulez vous pour cet arc ? "<< std::endl;
+        std::cin>>poids;
+    }
+    while((poids<0)|| (poids>100));
+
+    add_interfaced_edge(n, som1, som2, poids);
+}
+
 
 /// eidx index of edge to remove
 void Graph::test_remove_edge(int eidx)
