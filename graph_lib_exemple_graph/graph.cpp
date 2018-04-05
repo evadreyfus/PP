@@ -161,14 +161,13 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
 
     //declaration de la box contenant le bouton delete
     m_tool_box.add_child(m_delete_box);
-    m_delete_box.set_pos(-10,300);
+    // m_delete_box.set_pos(-10,4);
     m_delete_box.set_dim(100,100);
     m_delete.set_dim(50,15);
     m_delete_image.set_pic_name("delete.jpg");
     m_delete.add_child(m_delete_image);
     m_delete_box.add_child(m_delete);
 
-    //Déclaration de la box et du bouton save
     m_tool_box.add_child(m_sauv_box);
     m_sauv_box.set_pos(-10,50);
     m_sauv_box.set_dim(100,100);
@@ -176,15 +175,6 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_sauv_image.set_pic_name("save.jpg");
     m_sauv.add_child(m_sauv_image);
     m_sauv_box.add_child(m_sauv);
-
-    //Déclaration de la box contenant le boutin add
-    m_tool_box.add_child(m_add_box);
-    m_add_box.set_pos(-10,600);
-    m_add_box.set_dim(100,100);
-    m_add.set_dim(50,15);
-    m_add_image.set_pic_name("add.jpg");
-    m_add.add_child(m_add_image);
-    m_add_box.add_child(m_add);
 
 
 }
@@ -200,7 +190,7 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
 ///        CREATION DU GRAPHE ET ARCS ENTRE SOMMETS
 ///________________________________________________________
 
-void Graph::loadgraphe()
+void Graph::loadgraphe(int m_choixgraphe)
 {
     m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
     // La ligne précédente est en gros équivalente à :
@@ -218,36 +208,27 @@ void Graph::loadgraphe()
     int m_s2;
     int m_pe;
     int nbSommets, nbEdges;
+   // int m_choixgraphe;
 
-    if(m_choixGraphe == 1)
+    switch(m_choixgraphe)
     {
-        fichier1 = "sommet1.txt";
+    case 1:
+        {
+
+         fichier1 = "sommet1.txt";
         fichier2 = "edge1.txt";
-    }
-
-    if(m_choixGraphe == 2)
-    {
-        fichier1 = "sommet2.txt";
-        fichier2 = "edge2.txt";
-    }
-
-    if(m_choixGraphe == 3)
-    {
-        fichier1 = "sommet3.txt";
-        fichier2 = "edge3.txt";
-    }
-
-    ifstream newfichier(fichier1, ios::in);
-
+        ifstream newfichier(fichier1, ios::in);
     if(newfichier)
     {
         //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
         newfichier >> nbSommets;
+        std::cout << nbSommets << std::endl;
 
-        for(int i=0; i<nbSommets; i++)
+        for(unsigned int i=0; i<14; i++)
         {
             newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
-            image= m_nom+".jpg";
+            std::cout << " " << m_sommet << " " << m_poids << " " << m_pos1 << " " << m_pos2 << " " << m_nom;
+            image = m_nom+".jpg";
             // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
 
             add_interfaced_vertex(m_sommet, m_poids, m_pos1,m_pos2, image);
@@ -270,9 +251,98 @@ void Graph::loadgraphe()
     }
     else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
 
+        break;
+    }
+    case 2:
+        {
+
+        fichier1 = "sommet2.txt";
+        fichier2 = "edge2.txt";
+   ifstream newfichier(fichier1, ios::in);
+    if(newfichier)
+    {
+        //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
+        newfichier >> nbSommets;
+        std::cout << nbSommets << std::endl;
+
+        for(unsigned int i=0; i<14; i++)
+        {
+            newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
+            std::cout << " " << m_sommet << " " << m_poids << " " << m_pos1 << " " << m_pos2 << " " << m_nom;
+            image = m_nom+".jpg";
+            // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
+
+            add_interfaced_vertex(m_sommet, m_poids, m_pos1,m_pos2, image);
+        }
+        newfichier.close();
+    }
+    else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
+
+    ifstream nouveaufichier(fichier2, ios :: in);
+    if(nouveaufichier)
+    {
+        nouveaufichier >> nbEdges;
+
+        for (int i=0; i<nbEdges; i++)
+        {
+            nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe;
+            add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
+        }
+        nouveaufichier.close();
+    }
+    else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
+
+
+    break;
+        }
+    case 3:
+        {
+        fichier1 = "sommet3.txt";
+        fichier2 = "edge3.txt";
+      ifstream newfichier(fichier1, ios::in);
+    if(newfichier)
+    {
+        //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
+        newfichier >> nbSommets;
+        std::cout << nbSommets << std::endl;
+
+        for(unsigned int i=0; i<14; i++)
+        {
+            newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
+            std::cout << " " << m_sommet << " " << m_poids << " " << m_pos1 << " " << m_pos2 << " " << m_nom;
+            image = m_nom+".jpg";
+            // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
+
+            add_interfaced_vertex(m_sommet, m_poids, m_pos1,m_pos2, image);
+        }
+        newfichier.close();
+    }
+    else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
+
+    ifstream nouveaufichier(fichier2, ios :: in);
+    if(nouveaufichier)
+    {
+        nouveaufichier >> nbEdges;
+
+        for (int i=0; i<nbEdges; i++)
+        {
+            nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe;
+            add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
+        }
+        nouveaufichier.close();
+    }
+    else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
+
+break;
+        }
+    default:
+        {
+        break;
+        }
+
 }
 
-
+}
 /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
 void Graph::update()
 {
@@ -293,7 +363,6 @@ void Graph::update()
 
     Sauvegarde();
     Supprimer();
-    Ajouter();
 
 }
 
@@ -436,53 +505,6 @@ void Graph::Sauvegarde()
     }
 }
 
-void Graph::Ajouter()
-{
-    m_interface->m_top_box.update();
-    if(m_interface->m_add.clicked())
-    {
-        Add_Edge();
-    }
-}
-
-void Graph::Add_Edge()
-{
-    int n=0, som1, som2;
-    int poids;
-    bool x=false;
-
-    do
-    {
-        if (m_edges.count(n)==1)
-        {
-            n++;
-        }
-        else
-        {
-            x=true;
-        }
-    }
-    while(!x);
-
-    do
-    {
-        std::cout<<"Choisir votre sommet 1 : " <<std::endl;
-        std::cin>> som1;
-        std::cout << "Choisir votre sommet 2 : " <<std::endl;
-        std::cin >> som2;
-    }
-    while((som1==som2));
-
-    do
-    {
-        std::cout<< "Quel poids voulez vous pour cet arc ? "<< std::endl;
-        std::cin>>poids;
-    }
-    while((poids<0)|| (poids>100));
-
-    add_interfaced_edge(n, som1, som2, poids);
-}
-
 /// eidx index of edge to remove
 void Graph::test_remove_edge(int eidx)
 {
@@ -535,7 +557,7 @@ void Graph::test_remove_vertex(int vidx)
     if (m_interface && remver.m_interface)
         m_interface->m_main_box.remove_child (remver.m_interface->m_top_box);
 }
-void Graph::menu()
+/*void Graph::menu()
 {
     do
     {
@@ -546,3 +568,5 @@ void Graph::menu()
 
     loadgraphe();
 }
+*/
+

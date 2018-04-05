@@ -282,20 +282,12 @@ class GraphInterface
         //bouton SAVE
         grman::WidgetButton m_sauv;
 
+
         //une boite contenant un bouton sauv
         grman::WidgetBox m_sauv_box;
 
         //image sauvegarde
         grman::WidgetImage m_sauv_image;
-
-        //Boite contenant le bouton add
-        grman::WidgetBox m_add_box;
-
-        //image du bouton add
-        grman::WidgetImage m_add_image;
-
-        //bouton ADD
-        grman::WidgetButton m_add;
 
 
     public :
@@ -338,7 +330,7 @@ class Graph
         /// Voir implémentation dans le .cpp
         /// Cette méthode est à enlever et remplacer par un système
         /// de chargement de fichiers par exemple.
-        void loadgraphe();
+        void loadgraphe(int m_choixgraphe);
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
         void update();
@@ -349,12 +341,11 @@ class Graph
         void save_vertex();
         void Sauvegarde();
         void menu();
-        void Add_Edge();
-        void Ajouter();
+        void boucleJeu();
+
 
 };
 
 
 
 #endif // GRAPH_H_INCLUDED
-
