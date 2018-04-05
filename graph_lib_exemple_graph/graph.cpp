@@ -190,7 +190,6 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
 ///        CREATION DU GRAPHE ET ARCS ENTRE SOMMETS
 ///________________________________________________________
 
-
 void Graph::loadgraphe()
 {
     m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
@@ -208,6 +207,7 @@ void Graph::loadgraphe()
     int m_s1;
     int m_s2;
     int m_pe;
+    int nbSommets, nbEdges;
 
     if(m_choixGraphe == 1)
     {
@@ -232,8 +232,9 @@ void Graph::loadgraphe()
     if(newfichier)
     {
         //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
+        newfichier >> nbSommets;
 
-        for(int i=0; i<14; i++)
+        for(int i=0; i<nbSommets; i++)
         {
             newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
             image= m_nom+".jpg";
@@ -244,11 +245,13 @@ void Graph::loadgraphe()
         newfichier.close();
     }
     else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
-cout<<"ok"<<endl;
+
     ifstream nouveaufichier(fichier2, ios :: in);
     if(nouveaufichier)
     {
-        for (int i=0; i<21; i++)
+        nouveaufichier >> nbEdges;
+
+        for (int i=0; i<nbEdges; i++)
         {
             nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe;
             add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
@@ -258,7 +261,6 @@ cout<<"ok"<<endl;
     else std::cout << "Erreur lors du chargement du fichier..." << std::endl;
 
 }
-
 
 
 /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
@@ -321,8 +323,8 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
 
     m_edges[idx].m_from = id_vert1;
     m_edges[idx].m_to = id_vert2;
-    m_vertices[id_vert1].m_out.push_back(idx);
-    m_vertices[id_vert2].m_in.push_back(idx);
+    m_vertices[id_vert1].m_out.push_back(id_vert2);
+    m_vertices[id_vert2].m_in.push_back(id_vert1);
 }
 
 
@@ -344,6 +346,8 @@ void Graph::save_vertex()
 
     if(newfichier)
     {
+        newfichier << m_vertices.size() << std::endl;
+
         for(unsigned int i=0 ; i < m_vertices.size() ; i++)
         {
 
@@ -377,6 +381,8 @@ void Graph::save_edge()
 
     if(nouveaufichier)
     {
+        nouveaufichier << m_edges.size() << std::endl;
+
         for(unsigned int i=0 ; i < m_edges.size() ; i++)
         {
             nouveaufichier << i << " " << m_edges[i].m_from << " " << m_edges[i].m_to << " " << m_edges[i].m_weight << std::endl;
@@ -386,7 +392,6 @@ void Graph::save_edge()
     else
         std::cout << "erreur lors de l'enregistrement" << std::endl;
 }
-
 void Graph::Supprimer ()
 {
     int num;
