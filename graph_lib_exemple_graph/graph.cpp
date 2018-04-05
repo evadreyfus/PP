@@ -279,6 +279,9 @@ void Graph::update()
     for (auto &elt : m_edges)
         elt.second.post_update();
 
+    Sauvegarde();
+    Supprimer();
+
 }
 
 /// Aide à l'ajout de sommets interfacés
