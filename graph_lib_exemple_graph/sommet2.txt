@@ -1,0 +1,13 @@
+12
+0 60 30 10 lion2
+1 50 300 10 vautour
+2 0 600 0 guepard2
+3 0 20 250 girafe
+4 0 300 350 rinhoceros
+5 0 500 150 babouin2
+6 30 500 270 serpent
+7 0 500 390 renard
+8 0 500 510 souris
+9 0 500 620 herbe
+10 100 800 300 gazelle2
+11 0 150 600 arbre
