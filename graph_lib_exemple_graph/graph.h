@@ -212,6 +212,7 @@ class Edge
     // directement aux attributs (y compris privés)
     friend class Graph;
     friend class EdgeInterface;
+    friend class WidgetEdge;
 
     private :
         /// indice du sommet de départ de l'arc
@@ -222,6 +223,9 @@ class Edge
 
         /// un exemple de donnée associée à l'arc, on peut en ajouter d'autres...
         double m_weight;
+
+        /// Aspect positif et negatif graphe pour le graphe 1
+        int m_signe;
 
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<EdgeInterface> m_interface = nullptr;
@@ -342,32 +346,35 @@ class Graph
         Graph (GraphInterface *interface=nullptr) :
             m_interface(interface)  {  }
 
-        ~Graph() {};
-
-        void add_interfaced_vertex(int idx, double value, int x, int y, std::string pic_name="", int pic_idx=0 );
-        void add_interfaced_edge(int idx, int vert1, int vert2, double weight=0);
-
-        /// Méthode spéciale qui construit un graphe arbitraire (démo)
-        /// Voir implémentation dans le .cpp
-        /// Cette méthode est à enlever et remplacer par un système
-        /// de chargement de fichiers par exemple.
+        /// Chargement des graphes
         void loadgraphe(int m_choixgraphe);
 
-        /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
+        /// appelée dans la boucle de jeu
         void update(bool *ok);
-        void test_remove_edge(int eidx);
-        void test_remove_vertex(int vidx);
-        void Supprimer ();
+
+        /// Supprimer arete et sommet
+        void Supprimer(); // supprimer un sommet au choix
+        void test_remove_edge(int eidx); // supprimer une arete
+        void test_remove_vertex(int vidx); // supprimer un sommet
+        void Erase(); // Tout supprimer
+
+        /// Sauvegarder les graphes
+        void Sauvegarde();
         void save_edge();
         void save_vertex();
-        void Sauvegarde();
+
+        /// Menu
         void menu();
         void boucleJeu();
+
+        /// Ajouter arete et sommet
+        void Ajouter();
         void Add_Edge();
         void Add_Vertices();
-        void Ajouter();
-        void Erase();
+        void add_interfaced_vertex(int idx, double value, int x, int y, std::string pic_name="", int pic_idx=0 );
+        void add_interfaced_edge(int idx, int vert1, int vert2, int signe, double weight = 0);
 
+        /// Getters et setters
         void set_choixGraphe(int i) {m_choixGraphe = i;}
         int get_choixGraphe() {return m_choixGraphe;}
 };

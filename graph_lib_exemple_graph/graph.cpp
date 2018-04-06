@@ -225,6 +225,7 @@ void Graph::loadgraphe(int m_choixgraphe)
     int m_s2;
     int m_pe;
     int nbSommets, nbEdges;
+    int signe;
 
     switch(m_choixgraphe)
     {
@@ -261,9 +262,10 @@ void Graph::loadgraphe(int m_choixgraphe)
 
             for (int i=0; i<nbEdges; i++)
             {
-                nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe;
-                add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
+                nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe >> signe;
+                add_interfaced_edge(m_edge, m_s1, m_s2, signe, m_pe);
             }
+
             nouveaufichier.close();
         }
         else
@@ -304,8 +306,8 @@ void Graph::loadgraphe(int m_choixgraphe)
 
             for (int i=0; i<nbEdges; i++)
             {
-                nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe;
-                add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
+                nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe >> signe;
+                add_interfaced_edge(m_edge, m_s1, m_s2, signe, m_pe);
             }
             nouveaufichier.close();
         }
@@ -350,8 +352,8 @@ void Graph::loadgraphe(int m_choixgraphe)
 
             for (int i=0; i<nbEdges; i++)
             {
-                nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe;
-                add_interfaced_edge(m_edge, m_s1, m_s2,m_pe);
+                nouveaufichier >> m_edge >> m_s1 >> m_s2 >> m_pe >> signe;
+                add_interfaced_edge(m_edge, m_s1, m_s2, signe, m_pe);
             }
             nouveaufichier.close();
         }
@@ -412,7 +414,7 @@ void Graph::add_interfaced_vertex(int idx, double value, int x, int y, std::stri
 }
 
 /// Aide à l'ajout d'arcs interfacés
-void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weight)
+void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, int signe, double weight)
 {
     if ( m_edges.find(idx)!=m_edges.end() )
     {
@@ -434,6 +436,24 @@ void Graph::add_interfaced_edge(int idx, int id_vert1, int id_vert2, double weig
     m_edges[idx].m_to = id_vert2;
     m_vertices[id_vert1].m_out.push_back(id_vert2);
     m_vertices[id_vert2].m_in.push_back(id_vert1);
+
+    if (signe == 0)
+    {
+        ei->m_top_edge.m_color = ROUGECLAIR;
+        m_edges[idx].m_signe = 0;
+    }
+
+    else if(signe == 1)
+    {
+        ei->m_top_edge.m_color = VERTCLAIR;
+        m_edges[idx].m_signe = 1;
+    }
+
+    else if(signe == 2)
+    {
+        ei->m_top_edge.m_color = GRISSOMBRE;
+        m_edges[idx].m_signe = 2;
+    }
 }
 
 
@@ -494,7 +514,7 @@ void Graph::save_edge()
 
         for(unsigned int i=0 ; i < m_edges.size() ; i++)
         {
-            nouveaufichier << i << " " << m_edges[i].m_from << " " << m_edges[i].m_to << " " << m_edges[i].m_weight << std::endl;
+            nouveaufichier << i << " " << m_edges[i].m_from << " " << m_edges[i].m_to << " " << m_edges[i].m_weight << " " << m_edges[i].m_signe << std::endl;
         }
         nouveaufichier.close();
     }
@@ -502,6 +522,7 @@ void Graph::save_edge()
         std::cout << "erreur lors de l'enregistrement" << std::endl;
 }
 
+/// Méthode pour supprimer un sommet
 void Graph::Supprimer ()
 {
     int num;
@@ -509,8 +530,8 @@ void Graph::Supprimer ()
 
     if(m_interface->m_delete.clicked())
     {
-        cout<<"Quel sommet voulez-vous supprimer ?"<<endl;
-        cin>>num;
+        cout << "Quel sommet voulez-vous supprimer ?" << endl;
+        cin >> num;
     }
     // test_remove_vertex(num);
 
@@ -518,22 +539,24 @@ void Graph::Supprimer ()
     {
         if ((elem.second.m_to==num)||(elem.second.m_from==num))
         {
-            test_remove_edge(elem.first);
-
+            test_remove_edge(elem.first); // Effacer une arete
         }
     }
 }
 
+/// Méthode pour sauvegarder un graphe
 void Graph::Sauvegarde()
 {
     m_interface->m_top_box.update();
 
     if(m_interface->m_sauv.clicked())
     {
-        save_edge();
-        save_vertex();
+        save_edge(); // sauver les aretes
+        save_vertex(); // sauver les sommets
     }
 }
+
+/// Méthode pour ajouter une arete ou un sommet
 void Graph::Ajouter()
 {
     string x;
@@ -550,62 +573,70 @@ void Graph::Ajouter()
         {
            Add_Edge();
         }
-
     }
 }
 
+/// Méthode pour ajouter un sommet
 void Graph::Add_Vertices()
 {
     string choix;
     string image;
+
     std::cout << "Quel sommet voulez vous charger ?" << endl;
     std::cin >> choix;
+
     image = choix+".jpg";
-    add_interfaced_vertex(m_vertices.size(), 0, 0, 0, image, m_vertices.size());
+
+    add_interfaced_vertex(m_vertices.size(), 0, 0, 0, image, m_vertices.size()); // Ajouter le sommet
 }
 
-
-
+/// Méthode pour ajouter une arete
 void Graph::Add_Edge()
 {
-    int n=0, som1, som2;
+    // Variables
+    int n = 0, som1, som2, signe;
     int poids;
-    bool x=false;
+    bool x = false;
 
     do
     {
         if (m_edges.count(n)==1)
-        {
             n++;
-        }
-        else
-        {
-            x=true;
-        }
-    }
-    while(!x);
+
+        else x=true;
+
+    } while(!x);
 
     do
     {
-        std::cout<<"Choisir votre sommet 1 : " <<std::endl;
-        std::cin>> som1;
-        std::cout << "Choisir votre sommet 2 : " <<std::endl;
+        std::cout << "Choisir votre sommet 1 : " << std::endl;
+        std::cin >> som1;
+        std::cout << "Choisir votre sommet 2 : " << std::endl;
         std::cin >> som2;
-    }
-    while((som1==som2));
+
+    }while((som1 == som2));
 
     do
     {
-        std::cout<< "Quel poids voulez vous pour cet arc ? "<< std::endl;
-        std::cin>>poids;
+        std::cout << "Quel poids voulez vous pour cet arc ?" << std::endl;
+        std::cin >> poids;
     }
-    while((poids<0)|| (poids>100));
+    while((poids < 0)|| (poids > 100));
 
-    add_interfaced_edge(n, som1, som2, poids);
+    do
+    {
+        std::cout<< "Influence positive, negative ou neutre ? "<< std::endl;
+        std::cout << "1 - Positive" << std::endl;
+        std::cout << "0 - Negative" << std::endl;
+        std::cout << "2 - Neutre" << std::endl;
+        std::cin >> signe;
+
+    }while((signe!=0) && (signe!=1) && (signe!=2));
+
+    add_interfaced_edge(n, som1, som2, signe, poids); // Ajouter une arete
 }
 
-
-/// eidx index of edge to remove
+/// Méthode pour supprimer une arete
 void Graph::test_remove_edge(int eidx)
 {
 /// référence vers le Edge à enlever
@@ -643,6 +674,7 @@ void Graph::test_remove_edge(int eidx)
     std::cout << m_edges.size() << std::endl;
 }
 
+/// Méthode pour supprimer un sommet
 void Graph::test_remove_vertex(int vidx)
 {
     Vertex &remver = m_vertices.at(vidx);
@@ -663,18 +695,16 @@ void Graph::Erase()
     int taille1 = m_edges.size();
     int taille2 = m_vertices.size();
 
-    std::cout << taille1 << " " << taille2 << std::endl;
-
-    for(unsigned int i = 0 ; i < taille1 ; i++)
+    for(int i = 0 ; i < taille1 ; i++)
     {
-        m_edges.erase(m_edges.find(i));
+        //m_edges.erase(m_edges.find(i));
+        test_remove_edge(i);
     }
 
-    for(unsigned int i = 0 ; i < taille2 ; i++)
+    for(int i = 0 ; i < taille2 ; i++)
     {
         m_vertices.erase(m_vertices.find(i));
+        //test_remove_vertex(i);
     }
-    std::cout << m_edges.size() << std::endl;
-    std::cout << m_vertices.size() << std::endl;
 
 }

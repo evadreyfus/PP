@@ -102,11 +102,13 @@ int main()
     BITMAP* savane = load_bitmap("savane.bmp",NULL);
     BITMAP* quitter = load_bitmap("quitter.bmp",NULL);
 
+    // Initilisation des variables
     bool fin = true;
     bool Run = true;
     bool ok = true;
     Graph g; // Objet Graph
 
+    // boucle générale
     while(Run)
     {
         // Menu
