@@ -298,6 +298,16 @@ class GraphInterface
         //bouton ADD
         grman::WidgetButton m_add;
 
+        //Boite contenant le bouton Retour
+        grman::WidgetBox m_return_box;
+
+        //image du bouton Retour
+        grman::WidgetImage m_return_image;
+
+        //bouton Retour
+        grman::WidgetButton m_return;
+
+
 
     public :
 
@@ -332,6 +342,8 @@ class Graph
         Graph (GraphInterface *interface=nullptr) :
             m_interface(interface)  {  }
 
+        ~Graph() {};
+
         void add_interfaced_vertex(int idx, double value, int x, int y, std::string pic_name="", int pic_idx=0 );
         void add_interfaced_edge(int idx, int vert1, int vert2, double weight=0);
 
@@ -342,7 +354,7 @@ class Graph
         void loadgraphe(int m_choixgraphe);
 
         /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
-        void update();
+        void update(bool *ok);
         void test_remove_edge(int eidx);
         void test_remove_vertex(int vidx);
         void Supprimer ();
@@ -352,11 +364,13 @@ class Graph
         void menu();
         void boucleJeu();
         void Add_Edge();
+        void Add_Vertices();
         void Ajouter();
+        void Erase();
 
-
+        void set_choixGraphe(int i) {m_choixGraphe = i;}
+        int get_choixGraphe() {return m_choixGraphe;}
 };
-
 
 
 #endif // GRAPH_H_INCLUDED
