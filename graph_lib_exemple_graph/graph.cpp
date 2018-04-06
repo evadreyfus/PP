@@ -373,14 +373,56 @@ void Graph::loadgraphe(int m_choixgraphe)
 /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
 void Graph::update(bool *ok)
 {
-    if (!m_interface)
+      if (!m_interface)
         return;
 
     for (auto &elt : m_vertices)
-        elt.second.pre_update();
+    elt.second.pre_update();
 
     for (auto &elt : m_edges)
-        elt.second.pre_update();
+    elt.second.pre_update();
+
+        m_interface->m_top_box.update();
+
+  if(m_interface->m_sauv.clicked())
+    {
+    Sauvegarde();
+
+    for (auto &elt : m_vertices)
+    elt.second.pre_update();
+
+    for (auto &elt : m_edges)
+    elt.second.pre_update();
+
+    }
+
+    if(m_interface->m_delete.clicked()){
+        Supprimer();
+
+    for (auto &elt : m_vertices)
+    elt.second.pre_update();
+
+    for (auto &elt : m_edges)
+    elt.second.pre_update();
+    }
+        if(m_interface->m_add.clicked()){
+    Ajouter();
+    for (auto &elt : m_vertices)
+    elt.second.pre_update();
+
+    for (auto &elt : m_edges)
+    elt.second.pre_update();
+    }
+
+if(m_interface->m_return.clicked())
+{
+        *ok = false;
+        for (auto &elt : m_vertices)
+    elt.second.pre_update();
+
+    for (auto &elt : m_edges)
+    elt.second.pre_update();
+}
 
     for (auto &elt : m_vertices)
         elt.second.post_update();
@@ -388,13 +430,7 @@ void Graph::update(bool *ok)
     for (auto &elt : m_edges)
         elt.second.post_update();
 
-    Sauvegarde();
-   // Supprimer();
-    Ajouter();
 
-    m_interface->m_top_box.update();
-    if(m_interface->m_return.clicked())
-        *ok = false;
 }
 
 /// Aide à l'ajout de sommets interfacés
@@ -526,43 +562,38 @@ void Graph::save_edge()
 void Graph::Supprimer ()
 {
     int num;
-    m_interface->m_top_box.update();
 
-    if(m_interface->m_delete.clicked())
-    {
-        cout << "Quel sommet voulez-vous supprimer ?" << endl;
-        cin >> num;
-    }
+        cout<<"Quel sommet voulez-vous supprimer ?"<<endl;
+        cin>>num;
+
+
     // test_remove_vertex(num);
 
-    for (auto& elem : m_edges)
+    for (auto& aretes : m_edges)
     {
-        if ((elem.second.m_to==num)||(elem.second.m_from==num))
+        if ((aretes.second.m_to==num)||(aretes.second.m_from==num))
         {
-            test_remove_edge(elem.first); // Effacer une arete
+            test_remove_edge(aretes.first);
+
         }
     }
 }
 
+
 /// Méthode pour sauvegarder un graphe
 void Graph::Sauvegarde()
 {
-    m_interface->m_top_box.update();
+        save_edge();
+        save_vertex();
 
-    if(m_interface->m_sauv.clicked())
-    {
-        save_edge(); // sauver les aretes
-        save_vertex(); // sauver les sommets
-    }
 }
 
 /// Méthode pour ajouter une arete ou un sommet
 void Graph::Ajouter()
 {
     string x;
-    m_interface->m_top_box.update();
-    if(m_interface->m_add.clicked())
-    {
+
+
         std::cout<<"Que voulez vous ajouter ? (sommet ou arc)" << endl;
         cin >> x;
         if (x=="sommet")
@@ -573,8 +604,8 @@ void Graph::Ajouter()
         {
            Add_Edge();
         }
-    }
 }
+
 
 /// Méthode pour ajouter un sommet
 void Graph::Add_Vertices()
@@ -697,8 +728,8 @@ void Graph::Erase()
 
     for(int i = 0 ; i < taille1 ; i++)
     {
-        //m_edges.erase(m_edges.find(i));
-        test_remove_edge(i);
+        m_edges.erase(m_edges.find(i));
+        //test_remove_edge(i);
     }
 
     for(int i = 0 ; i < taille2 ; i++)

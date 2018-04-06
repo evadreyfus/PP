@@ -4,7 +4,7 @@
 #include "graph.h"
 ///Sous-programme du menu principale
 
-void menu (BITMAP* ecran, BITMAP* bienvenue, BITMAP* bacteries,BITMAP* cycle, BITMAP* savane, BITMAP* quitter, bool fin, Graph *g, bool Run, bool *ok)
+void menu (BITMAP* ecran, BITMAP* bienvenue, BITMAP* bacteries,BITMAP* cycle, BITMAP* savane, BITMAP* quitter, bool fin, Graph *g, bool *ok)
 {
 
     fin = false; // variable de la boucle
@@ -60,7 +60,6 @@ void menu (BITMAP* ecran, BITMAP* bienvenue, BITMAP* bacteries,BITMAP* cycle, BI
                 BITMAP* bye=load_bitmap("bye.bmp",NULL); //Chargement bitmap pour affichage des informations
                 blit(bye,ecran,0,0,0,0,800,600); //Affichage du bitmap explicatif de nos réseaux
                 v = 2;
-                Run = false;
             }
         }
 
@@ -112,7 +111,7 @@ int main()
     while(Run)
     {
         // Menu
-        menu(ecran, bienvenue, bacteries, cycle, savane, quitter, fin, &g, Run, &ok);
+        menu(ecran, bienvenue, bacteries, cycle, savane, quitter, fin, &g,&ok);
 
         // Boucle de jeu
         while ( (!key[KEY_ESC]) && ok )
