@@ -244,7 +244,7 @@ class Edge
         Edge (double weight=0, EdgeInterface *interface=nullptr) :
             m_weight(weight), m_interface(interface)  {  }
 
-        /// Edge étant géré par Graph ce sera la méthode update de graph qui appellera
+        //C:\Users\sarah\Desktop\PP\graph_lib_exemple_graph\graph.h/ Edge étant géré par Graph ce sera la méthode update de graph qui appellera
         /// le pre_update et post_update de Edge (pas directement la boucle de jeu)
         /// Voir l'implémentation Graph::update dans le .cpp
         void pre_update();
@@ -354,17 +354,20 @@ class Graph
         std::shared_ptr<GraphInterface> m_interface = nullptr;
 
         ///Nbre de sommet total
-        //int V=m_vertices.size();
-int SommetTOT;//=m_vertices.size();
+
+        int V;
         ///liste des sommets adjacents
         list<int> *adj;
+
+
 
     public:
 
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
         Graph (GraphInterface *interface=nullptr) :
-m_interface(interface),adj (new list<int>[SommetTOT]) {}
+             m_interface(interface),adj (new list<int>[V])  { this->V = V; }
+
         /// Chargement des graphes
         void loadgraphe(int m_choixgraphe);
 
@@ -397,25 +400,34 @@ m_interface(interface),adj (new list<int>[SommetTOT]) {}
         void set_choixGraphe(int i) {m_choixGraphe = i;}
         int get_choixGraphe() {return m_choixGraphe;}
 
-         ///ajouter arc
+    ///Fonction fortement connexe
+    void Fortementconnexe();
+
+};
+class Graphe
+{
+    int V;    // No. of vertices
+    list<int> *adj;    // An array of adjacency lists
+
+   ///Fonction qui empile les sommets nombre croissant du timing (à mieux expliquer)
+    ///En d'autres termes le premier element de la pile est le dernier marqué avec le plus grand temps
+    void marquageDFS(int v, bool visited[], stack<int> &Stack);
+
+    ///Fonction DFS
+    void DFS(int v, bool visited[]);
+public:
+
+    Graphe(int V);
+    ///ajouter arc
+
     void addEdge(int v, int w);
 
-    ///Affichage des SCC
+     ///Affichage des SCC
+
     void SCC();
 
     ///Fonction de la classe Graph qui transpose le graphe (orientation à l'envers quoi)
-    void Transposer();
-
-    ///Fonction qui empile les sommets nombre croissant du timing (à mieux expliquer)
-    ///En d'autres termes le premier element de la pile est le dernier marqué avec le plus grand temps
-    void marquageDFS(int v, bool marquage[], stack<int> &Stack);
-
-    ///Fonction DFS
-    void DFS(int v, bool marquage[]);
-
-    ///Fonction fortement connexe
-    void Fortementconnexe();
+    Graphe Renverser();
 };
-
 
 #endif // GRAPH_H_INCLUDED

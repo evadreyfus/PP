@@ -186,7 +186,7 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_add_box.add_child(m_add);
 
     //Déclaration de la box contenant le boutin return
-    m_tool_box.add_child(m_return_box);
+    m_main_box.add_child(m_return_box);
     m_return_box.set_pos(-10,600);
     m_return_box.set_dim(100,100);
     m_return.set_dim(40,15);
@@ -195,7 +195,7 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_return_box.add_child(m_return);
 
        //Déclaration de la box contenant le boutin CONNEXE
-    m_tool_box.add_child(m_connexe_box);
+    m_main_box.add_child(m_connexe_box);
     m_connexe_box.set_pos(-10,400);
     m_connexe_box.set_dim(80,80);
     m_connexe.set_dim(40,15);
@@ -579,26 +579,35 @@ void Graph::save_edge()
         std::cout << "erreur lors de l'enregistrement" << std::endl;
 }
 
+
 /// Méthode pour supprimer un sommet
 void Graph::Supprimer ()
 {
     int num;
+    std::string choix;
 
-        cout<<"Quel sommet voulez-vous supprimer ?"<<endl;
-        cin>>num;
+    std::cout << "Que voulez-vous supprimer ? (sommet ou arc) :" << std::endl;
+    cin >> choix;
 
-
-    // test_remove_vertex(num);
-
-    for (auto& aretes : m_edges)
+    do
     {
-        if ((aretes.second.m_to==num)||(aretes.second.m_from==num))
+        if(choix == "sommet")
         {
-            test_remove_edge(aretes.first);
-
+            cout << "Quel sommet voulez-vous supprimer ?" << endl;
+            cin >> num;
+            test_remove_vertex(num);
         }
-    }
+
+        if(choix == "arc")
+        {
+            cout << "Quelle arete voulez-vous supprimer ?" << endl;
+            cin >> num;
+            test_remove_edge(num);
+        }
+
+    } while((choix != "sommet") && (choix != "arc"));
 }
+
 
 
 /// Méthode pour sauvegarder un graphe
@@ -691,55 +700,46 @@ void Graph::Add_Edge()
 /// Méthode pour supprimer une arete
 void Graph::test_remove_edge(int eidx)
 {
-/// référence vers le Edge à enlever
-    Edge &remed=m_edges.at(eidx);
-    std::cout << "Removing edge " << eidx << " " << remed.m_from << "->" << remed.m_to << " " << remed.m_weight << std::endl;
-/// Tester la cohérence : nombre d'arc entrants et sortants des sommets 1 et 2
-    std::cout << m_vertices[remed.m_from].m_in.size() << " " << m_vertices[remed.m_from].m_out.size() << std::endl;
-    std::cout << m_vertices[remed.m_to].m_in.size() << " " << m_vertices[remed.m_to].m_out.size() << std::endl;
-    std::cout << m_edges.size() << std::endl;
-/// test : on a bien des éléments interfacés
-    if (m_interface && remed.m_interface)
-    {
-/// Ne pas oublier qu'on a fait ça à l'ajout de l'arc :
-        /* EdgeInterface *ei = new EdgeInterface(m_vertices[id_vert1], m_vertices[id_vert2]); */
-        /* m_interface->m_main_box.add_child(ei->m_top_edge); */
-        /* m_edges[idx] = Edge(weight, ei); */
-/// Le new EdgeInterface ne nécessite pas de delete car on a un shared_ptr
-/// Le Edge ne nécessite pas non plus de delete car on n'a pas fait de new (sémantique par valeur)
-/// mais il faut bien enlever le conteneur d'interface m_top_edge de l'arc de la main_box du graphe
-        m_interface->m_main_box.remove_child( remed.m_interface->m_top_edge );
-    }
-/// Il reste encore à virer l'arc supprimé de la liste des entrants et sortants des 2 sommets to et from !
-/// References sur les listes de edges des sommets from et to
-    std::vector<int> &vefrom = m_vertices[remed.m_from].m_out;
-    std::vector<int> &veto = m_vertices[remed.m_to].m_in;
-    vefrom.erase( std::remove( vefrom.begin(), vefrom.end(), eidx ), vefrom.end() );
-    veto.erase( std::remove( veto.begin(), veto.end(), eidx ), veto.end() );
-/// Le Edge ne nécessite pas non plus de delete car on n'a pas fait de new (sémantique par valeur)
-/// Il suffit donc de supprimer l'entrée de la map pour supprimer à la fois l'Edge et le EdgeInterface
-/// mais malheureusement ceci n'enlevait pas automatiquement l'interface top_edge en tant que child de main_box !
-    m_edges.erase( eidx );
-/// Tester la cohérence : nombre d'arc entrants et sortants des sommets 1 et 2
-    std::cout << m_vertices[remed.m_from].m_in.size() << " " << m_vertices[remed.m_from].m_out.size() << std::endl;
-    std::cout << m_vertices[remed.m_to].m_in.size() << " " << m_vertices[remed.m_to].m_out.size() << std::endl;
-    std::cout << m_edges.size() << std::endl;
+    std::map<int, Edge>::iterator it;
+
+    /// test : on a bien des éléments interfacés
+    if (m_interface && m_edges[eidx].m_interface)
+        m_interface->m_main_box.remove_child( m_edges[eidx].m_interface->m_top_edge );
+
+    it = m_edges.find(eidx);
+
 }
 
 /// Méthode pour supprimer un sommet
+/// Méthode pour supprimer un sommet
 void Graph::test_remove_vertex(int vidx)
 {
-    Vertex &remver = m_vertices.at(vidx);
+    std::map<int, Edge>::iterator it;
+    std::map<int, Vertex>::iterator it2;
+
     std::cout << "On enleve le sommet " << vidx << std::endl;
 
-    for (unsigned int i = 0; i < remver.m_in.size(); i++)
-        test_remove_edge(remver.m_in[i]);
+    if (m_interface && m_vertices[vidx].m_interface)
+    {
+        m_interface->m_main_box.remove_child (m_vertices[vidx].m_interface->m_top_box);
+        it2 = m_vertices.find(vidx);
+        //m_vertices.erase(it2);
 
-    for (unsigned int i = 0; i < remver.m_out.size(); i++)
-        test_remove_edge(remver.m_out[i]);
+        for (unsigned int i=0 ; i<m_edges.size() ; i++)
+        {
+            if ((m_edges[i].m_to == vidx)||(m_edges[i].m_from == vidx))
+            {
+                it = m_edges.find(i);
 
-    if (m_interface && remver.m_interface)
-        m_interface->m_main_box.remove_child (remver.m_interface->m_top_box);
+                /// test : on a bien des éléments interfacés
+                if (m_interface && m_edges[i].m_interface)
+                    m_interface->m_main_box.remove_child( m_edges[i].m_interface->m_top_edge );
+
+                //m_edges.erase(it);
+                cout << "on a supprime arete " << i << endl;
+            }
+        }
+    }
 }
 
 void Graph::Erase()
@@ -750,114 +750,177 @@ void Graph::Erase()
     for(int i = 0 ; i < taille1 ; i++)
     {
         m_edges.erase(m_edges.find(i));
-        //test_remove_edge(i);
     }
 
     for(int i = 0 ; i < taille2 ; i++)
     {
         m_vertices.erase(m_vertices.find(i));
-        //test_remove_vertex(i);
     }
-
 }
 
-void Graph::DFS(int v, bool marquage[])
+///constructeur
+Graphe::Graphe(int V)
 {
-///marque le sommet comme marqué et l'affiche
-    marquage[v] = true;
+    this->V = V;
+    adj = new list<int>[V];
+}
+
+///affichage du resultat du DFS à partir d'un sommet V
+void Graphe::DFS(int v, bool visited[])
+{
+    ///Marquage du sommet comme visité et affichage
+    visited[v] = true;
     cout << v << " ";
 
-///parcourt les sommets adjacents au sommet qui vient d'être marqué
+    ///Marquage des sommets adjacents au sommet marqué
     list<int>::iterator i;
     for (i = adj[v].begin(); i != adj[v].end(); ++i)
-        if (!marquage[*i])
-            DFS(*i, marquage);
+        if (!visited[*i])
+            DFS(*i, visited);
 }
 
-void Graph::Transposer()
+Graphe Graphe::Renverser()
 {
-    //Graph g1;//(SommetTOT);
-    for (int v = 0; v <SommetTOT; v++)
+    ///creation d'un graphe bis que l'on va transposer
+    Graphe g(V);
+    for (int v = 0; v < V; v++)
     {
-///inverse le graphe si on  un arc a vers b il devient b vers a
+        ///Transforme l'arete u -> v en v -> u
         list<int>::iterator i;
         for(i = adj[v].begin(); i != adj[v].end(); ++i)
         {
-            adj[*i].push_back(v);
+            g.adj[*i].push_back(v);
         }
     }
-//    return g1;
+    return g; ///retourne le graphe transposer
 }
-
-void Graph::addEdge(int v, int w)
+///Fonction qui ajoute une arête (création)
+void Graphe::addEdge(int v, int w)
 {
-    adj[v].push_back(w); ///creation d'adjacences
+    adj[v].push_back(w);
 }
-
-void Graph::marquageDFS(int v, bool marquage[], stack<int> &Stack)
+///Fonction de marquage lors du passage du DFS
+void Graphe::marquageDFS(int v, bool visited[], stack<int> &Stack)
 {
-///marquage du sommet comme marqué
-    marquage[v] = true;
+    /// Le sommet est marqué
+    visited[v] = true;
 
-///marque les sommets adjacents
+    ///Marquage des sommets adjacents au sommet qui vient d'être marqué
     list<int>::iterator i;
-
     for(i = adj[v].begin(); i != adj[v].end(); ++i)
-    {
-        if(!marquage[*i])
-        {
-            marquageDFS(*i, marquage, Stack);
-        }
-    }
-///remplissage de la pile en fonction du temps (plutot position attribué lors du marquage.. peu clair comme explcation)
+        if(!visited[*i])
+            marquageDFS(*i, visited, Stack);
+
+    ///Le sommet est placé dans une pile
     Stack.push(v);
-cout<<v<<endl;
 }
 
-///Fonction qui trouve les composantes fortement connexes
-void Graph::SCC()
+///Fonction principale qui trouve les compo fortement connexes
+void Graphe::SCC()
 {
     stack<int> Stack;
 
-///Premiere DFS marque tous les sommets comme non marqué / non visité
-    bool *marquage = new bool[SommetTOT];
-    for(int i = 0; i < SommetTOT ; i++)
-        marquage[i] = false;
+///Marque tous les sommets comme non visités
+    bool *visited = new bool[V];
+    for(int i = 0; i < V; i++)
+        visited[i] = false;
 
-///marquage des sommets par DFS (donc dernier temps premier dans la pile )
-    for(int i = 0; i < SommetTOT; i++)
-        if(marquage[i] == false)
-            marquageDFS(i, marquage, Stack);
+    ///Rempli la pile en fonction de l'ordre de visite
+    for(int i = 0; i < V; i++)
+        if(visited[i] == false)
+            marquageDFS(i, visited, Stack);
 
-///Retourne l'orientation du graphe
-     Transposer();
+    ///creation du graphe transposer
+    Graphe gr = Renverser();
 
-///Deuxieme Dfs réalisé marque tous les sommets comme  non marqués
-    for(int i = 0; i < SommetTOT; i++)
-{
-            marquage[i] = false;
-}
-///On suit l'ordre de la pile stack et on fait un dfs en fonction de chaque sommet.
+    ///Seconde DFS sur le nouveau graphe et marquage des sommets comme non visite
+    for(int i = 0; i < V; i++)
+        visited[i] = false;
+
+    ///Les sommets sont étudiés en fonction de l'ordre dans la pile FIFO
     while (Stack.empty() == false)
     {
+        ///Un sommet est retiré de la pile
         int v = Stack.top();
         Stack.pop();
 
-///affichage du SCC
-        if (marquage[v] == false)
+        ///Affichage des compo connexes
+        if (visited[v] == false)
         {
-            DFS(v, marquage);
+            gr.DFS(v, visited);
             cout << endl;
         }
     }
 }
-
 void Graph::Fortementconnexe()
 
 {
-    SommetTOT=m_vertices.size();
-    cout << "Les composantes fortement connexes sont " << endl;
-    SCC();
+    if (m_choixGraphe==1)
+    {
 
+    int SommetTOT=5;
+    Graphe g(SommetTOT); ///initialisation du graphe G à 5 sommets
+    g.addEdge(0, 1);     ///ajout des aretes
+    g.addEdge(1, 2);
+    g.addEdge(2, 3);
+    g.addEdge(3, 0);
+    g.addEdge(2, 4);
+
+     cout << "Les composantes fortement connexes sont :";
+
+    g.SCC();
+    }
+ if (m_choixGraphe == 2)
+    {
+       int SommetTOT=12;
+    // Create a graph given in the above diagram
+    Graphe g(SommetTOT);
+    g.addEdge(4, 0);
+    g.addEdge(4, 1);
+    g.addEdge(3, 0);
+    g.addEdge(11, 3);
+    g.addEdge(11, 4);
+    g.addEdge(2, 1);
+    g.addEdge(9, 10);
+    g.addEdge(9, 4);
+    g.addEdge(8, 7);
+    g.addEdge(7, 6);
+    g.addEdge(6, 5);
+    g.addEdge(5, 2);
+    g.addEdge(9, 8);
+    g.addEdge(10, 2);
+      cout << "Les composantes fortement connexes sont :";
+
+    g.SCC();
+    }
+if (m_choixGraphe == 3)
+    {
+       int SommetTOT=14;
+    // Create a graph given in the above diagram
+    Graphe g(SommetTOT);
+    g.addEdge(4, 0);
+    g.addEdge(5, 0);
+    g.addEdge(3, 1);
+    g.addEdge(6, 0);
+    g.addEdge(6, 1);
+    g.addEdge(6, 2);
+    g.addEdge(6, 3);
+    g.addEdge(7, 0);
+    g.addEdge(8, 0);
+    g.addEdge(8, 1);
+    g.addEdge(8, 2);
+    g.addEdge(8, 3);
+    g.addEdge(11, 9);
+    g.addEdge(11, 10);
+    g.addEdge(11, 4);
+    g.addEdge(11, 5);
+    g.addEdge(11, 6);
+    g.addEdge(11, 7);
+    g.addEdge(11, 8);
+    g.addEdge(11, 12);
+    g.addEdge(11, 13);
+
+ cout << "Les composantes fortement connexes sont :";
+    g.SCC();
+    }
 }
-
