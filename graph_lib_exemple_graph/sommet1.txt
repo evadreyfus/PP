@@ -1,4 +1,7 @@
-3
-0 50 290 50 bacterie
-1 10 20 300 rat
-2 80 400 500 homme
+5
+0 30 0 0 rat
+1 20 290 0 cochon
+2 10 590 0 homme
+3 0 790 60 bacterie
+4 100 16 211 requin
+ 

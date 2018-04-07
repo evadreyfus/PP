@@ -77,6 +77,12 @@
 
 #include "grman/grman.h"
 
+using namespace std;
+#include <list>
+#include <stack>
+#include <fstream>
+
+
 /***************************************************
                     VERTEX
 ****************************************************/
@@ -311,6 +317,15 @@ class GraphInterface
         //bouton Retour
         grman::WidgetButton m_return;
 
+           //Boite contenant le bouton Connexe
+    grman::WidgetBox m_connexe_box;
+
+    //image du bouton connexe
+    grman::WidgetImage m_connexe_image;
+
+    //bouton Connexe
+    grman::WidgetButton m_connexe;
+
 
 
     public :
@@ -338,14 +353,18 @@ class Graph
         /// le POINTEUR sur l'interface associée, nullptr -> pas d'interface
         std::shared_ptr<GraphInterface> m_interface = nullptr;
 
+        ///Nbre de sommet total
+        //int V=m_vertices.size();
+int SommetTOT;//=m_vertices.size();
+        ///liste des sommets adjacents
+        list<int> *adj;
 
     public:
 
         /// Les constructeurs sont à compléter selon vos besoin...
         /// Ici on ne donne qu'un seul constructeur qui peut utiliser une interface
         Graph (GraphInterface *interface=nullptr) :
-            m_interface(interface)  {  }
-
+m_interface(interface),adj (new list<int>[SommetTOT]) {}
         /// Chargement des graphes
         void loadgraphe(int m_choixgraphe);
 
@@ -377,6 +396,25 @@ class Graph
         /// Getters et setters
         void set_choixGraphe(int i) {m_choixGraphe = i;}
         int get_choixGraphe() {return m_choixGraphe;}
+
+         ///ajouter arc
+    void addEdge(int v, int w);
+
+    ///Affichage des SCC
+    void SCC();
+
+    ///Fonction de la classe Graph qui transpose le graphe (orientation à l'envers quoi)
+    void Transposer();
+
+    ///Fonction qui empile les sommets nombre croissant du timing (à mieux expliquer)
+    ///En d'autres termes le premier element de la pile est le dernier marqué avec le plus grand temps
+    void marquageDFS(int v, bool marquage[], stack<int> &Stack);
+
+    ///Fonction DFS
+    void DFS(int v, bool marquage[]);
+
+    ///Fonction fortement connexe
+    void Fortementconnexe();
 };
 
 

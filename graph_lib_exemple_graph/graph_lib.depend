@@ -1,15 +1,18 @@
 # depslib dependency file v1.0
-1523025710 source:c:\users\sarah\desktop\pp\graph_lib_exemple_graph\graph.cpp
+1523091274 source:c:\users\sarah\desktop\pp\graph_lib_exemple_graph\graph.cpp
 	"graph.h"
 	<fstream>
 	<string>
 
-1523023649 c:\users\sarah\desktop\pp\graph_lib_exemple_graph\graph.h
+1523091381 c:\users\sarah\desktop\pp\graph_lib_exemple_graph\graph.h
 	<vector>
 	<map>
 	<string>
 	<memory>
 	"grman/grman.h"
+	<list>
+	<stack>
+	<fstream>
 
 1522836235 c:\users\sarah\desktop\pp\graph_lib_exemple_graph\grman\grman.h
 	<allegro.h>
@@ -51,7 +54,7 @@
 1522836235 source:c:\users\sarah\desktop\pp\graph_lib_exemple_graph\grman\widget.cpp
 	"widget.h"
 
-1523023649 source:c:\users\sarah\desktop\pp\graph_lib_exemple_graph\main.cpp
+1523026890 source:c:\users\sarah\desktop\pp\graph_lib_exemple_graph\main.cpp
 	"grman/grman.h"
 	<iostream>
 	"graph.h"

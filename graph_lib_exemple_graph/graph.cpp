@@ -194,6 +194,15 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_return.add_child(m_return_image);
     m_return_box.add_child(m_return);
 
+       //Déclaration de la box contenant le boutin CONNEXE
+    m_tool_box.add_child(m_connexe_box);
+    m_connexe_box.set_pos(-10,400);
+    m_connexe_box.set_dim(80,80);
+    m_connexe.set_dim(40,15);
+    m_connexe_image.set_pic_name("connexe.jpg");
+    m_connexe.add_child(m_connexe_image);
+    m_connexe_box.add_child(m_connexe);
+
 }
 
 
@@ -423,6 +432,18 @@ if(m_interface->m_return.clicked())
     for (auto &elt : m_edges)
     elt.second.pre_update();
 }
+
+if(m_interface->m_connexe.clicked())
+    {
+
+        Fortementconnexe();
+        for (auto &elt : m_vertices)
+            elt.second.pre_update();
+
+        for (auto &elt : m_edges)
+            elt.second.pre_update();
+
+    }
 
     for (auto &elt : m_vertices)
         elt.second.post_update();
@@ -739,3 +760,104 @@ void Graph::Erase()
     }
 
 }
+
+void Graph::DFS(int v, bool marquage[])
+{
+///marque le sommet comme marqué et l'affiche
+    marquage[v] = true;
+    cout << v << " ";
+
+///parcourt les sommets adjacents au sommet qui vient d'être marqué
+    list<int>::iterator i;
+    for (i = adj[v].begin(); i != adj[v].end(); ++i)
+        if (!marquage[*i])
+            DFS(*i, marquage);
+}
+
+void Graph::Transposer()
+{
+    //Graph g1;//(SommetTOT);
+    for (int v = 0; v <SommetTOT; v++)
+    {
+///inverse le graphe si on  un arc a vers b il devient b vers a
+        list<int>::iterator i;
+        for(i = adj[v].begin(); i != adj[v].end(); ++i)
+        {
+            adj[*i].push_back(v);
+        }
+    }
+//    return g1;
+}
+
+void Graph::addEdge(int v, int w)
+{
+    adj[v].push_back(w); ///creation d'adjacences
+}
+
+void Graph::marquageDFS(int v, bool marquage[], stack<int> &Stack)
+{
+///marquage du sommet comme marqué
+    marquage[v] = true;
+
+///marque les sommets adjacents
+    list<int>::iterator i;
+
+    for(i = adj[v].begin(); i != adj[v].end(); ++i)
+    {
+        if(!marquage[*i])
+        {
+            marquageDFS(*i, marquage, Stack);
+        }
+    }
+///remplissage de la pile en fonction du temps (plutot position attribué lors du marquage.. peu clair comme explcation)
+    Stack.push(v);
+cout<<v<<endl;
+}
+
+///Fonction qui trouve les composantes fortement connexes
+void Graph::SCC()
+{
+    stack<int> Stack;
+
+///Premiere DFS marque tous les sommets comme non marqué / non visité
+    bool *marquage = new bool[SommetTOT];
+    for(int i = 0; i < SommetTOT ; i++)
+        marquage[i] = false;
+
+///marquage des sommets par DFS (donc dernier temps premier dans la pile )
+    for(int i = 0; i < SommetTOT; i++)
+        if(marquage[i] == false)
+            marquageDFS(i, marquage, Stack);
+
+///Retourne l'orientation du graphe
+     Transposer();
+
+///Deuxieme Dfs réalisé marque tous les sommets comme  non marqués
+    for(int i = 0; i < SommetTOT; i++)
+{
+            marquage[i] = false;
+}
+///On suit l'ordre de la pile stack et on fait un dfs en fonction de chaque sommet.
+    while (Stack.empty() == false)
+    {
+        int v = Stack.top();
+        Stack.pop();
+
+///affichage du SCC
+        if (marquage[v] == false)
+        {
+            DFS(v, marquage);
+            cout << endl;
+        }
+    }
+}
+
+void Graph::Fortementconnexe()
+
+{
+    SommetTOT=m_vertices.size();
+    cout << "Les composantes fortement connexes sont " << endl;
+    SCC();
+
+}
+
