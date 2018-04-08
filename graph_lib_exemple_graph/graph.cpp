@@ -41,11 +41,6 @@ VertexInterface::VertexInterface(int idx, int x, int y, std::string pic_name, in
     m_label_idx.set_message( std::to_string(idx) );
 
 
-///________________________________________________
-///AJOUT DU BOUTON DELETE DANS CHAQUE SOMMET
-///____________________________________________________
-
-
 }
 
 
@@ -97,10 +92,6 @@ EdgeInterface::EdgeInterface(Vertex& from, Vertex& to)
     m_top_edge.add_child(m_box_edge);
     m_box_edge.set_dim(24,60);
     m_box_edge.set_bg_color(BLANCBLEU);
-    //  m_box_edge.add_child(m_delete_image);
-    // m_delete_image.set_pic_name("delete.jpg");
-    //m_delete.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down);
-    //m_delete.set_bg_color(ROUGE);
 
     // Le slider de réglage de valeur
     m_box_edge.add_child( m_slider_weight );
@@ -168,6 +159,7 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_delete.add_child(m_delete_image);
     m_delete_box.add_child(m_delete);
 
+    //Déclaration de la box contenant le boutin sauvegarde
     m_tool_box.add_child(m_sauv_box);
     m_sauv_box.set_pos(-10,10);
     m_sauv_box.set_dim(80,80);
@@ -186,7 +178,7 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_add_box.add_child(m_add);
 
     //Déclaration de la box contenant le boutin return
-    m_main_box.add_child(m_return_box);
+    m_tool_box.add_child(m_return_box);
     m_return_box.set_pos(-10,600);
     m_return_box.set_dim(100,100);
     m_return.set_dim(40,15);
@@ -194,15 +186,23 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_return.add_child(m_return_image);
     m_return_box.add_child(m_return);
 
-       //Déclaration de la box contenant le boutin CONNEXE
-    m_main_box.add_child(m_connexe_box);
-    m_connexe_box.set_pos(-10,400);
+    //Déclaration de la box contenant le boutin CONNEXE
+    m_tool_box.add_child(m_connexe_box);
+    m_connexe_box.set_pos(-10,300);
     m_connexe_box.set_dim(80,80);
     m_connexe.set_dim(40,15);
     m_connexe_image.set_pic_name("connexe.jpg");
     m_connexe.add_child(m_connexe_image);
     m_connexe_box.add_child(m_connexe);
 
+    //Déclaration de la box contenant le boutin K-CONNEXE
+    m_tool_box.add_child(m_kconnex_box);
+    m_kconnex_box.set_pos(-10,400);
+    m_kconnex_box.set_dim(80,80);
+    m_kconnex.set_dim(40,15);
+    m_kconnex_image.set_pic_name("kconnex.jpg");
+    m_kconnex.add_child(m_kconnex_image);
+    m_kconnex_box.add_child(m_kconnex);
 }
 
 
@@ -380,69 +380,81 @@ void Graph::loadgraphe(int m_choixgraphe)
 
 }
 /// La méthode update à appeler dans la boucle de jeu pour les graphes avec interface
-void Graph::update(bool *ok)
+void Graph::update(bool *ok, Graph *g)
 {
-      if (!m_interface)
+    if (!m_interface)
         return;
 
     for (auto &elt : m_vertices)
-    elt.second.pre_update();
+        elt.second.pre_update();
 
     for (auto &elt : m_edges)
-    elt.second.pre_update();
+        elt.second.pre_update();
 
-        m_interface->m_top_box.update();
+    m_interface->m_top_box.update();
 
-  if(m_interface->m_sauv.clicked())
+    if(m_interface->m_sauv.clicked()) //Si le bouton "sauvegarder" est cliqué
     {
-    Sauvegarde();
+        Sauvegarde();
 
-    for (auto &elt : m_vertices)
-    elt.second.pre_update();
-
-    for (auto &elt : m_edges)
-    elt.second.pre_update();
-
-    }
-
-    if(m_interface->m_delete.clicked()){
-        Supprimer();
-
-    for (auto &elt : m_vertices)
-    elt.second.pre_update();
-
-    for (auto &elt : m_edges)
-    elt.second.pre_update();
-    }
-        if(m_interface->m_add.clicked()){
-    Ajouter();
-    for (auto &elt : m_vertices)
-    elt.second.pre_update();
-
-    for (auto &elt : m_edges)
-    elt.second.pre_update();
-    }
-
-if(m_interface->m_return.clicked())
-{
-        *ok = false;
-        for (auto &elt : m_vertices)
-    elt.second.pre_update();
-
-    for (auto &elt : m_edges)
-    elt.second.pre_update();
-}
-
-if(m_interface->m_connexe.clicked())
-    {
-
-        Fortementconnexe();
         for (auto &elt : m_vertices)
             elt.second.pre_update();
 
         for (auto &elt : m_edges)
             elt.second.pre_update();
 
+    }
+
+    if(m_interface->m_delete.clicked()) //bouton supprimer
+    {
+        Supprimer();
+
+        for (auto &elt : m_vertices)
+            elt.second.pre_update();
+
+        for (auto &elt : m_edges)
+            elt.second.pre_update();
+    }
+
+    if(m_interface->m_add.clicked()) //bouton ajouter
+    {
+        Ajouter();
+        for (auto &elt : m_vertices)
+            elt.second.pre_update();
+
+        for (auto &elt : m_edges)
+            elt.second.pre_update();
+    }
+
+    if(m_interface->m_return.clicked()) //bouton back to menu
+    {
+        *ok = false;
+        for (auto &elt : m_vertices)
+            elt.second.pre_update();
+
+        for (auto &elt : m_edges)
+            elt.second.pre_update();
+    }
+
+    if(m_interface->m_connexe.clicked()) //bputon connexe
+    {
+
+        Fortementconnexe(g);
+        for (auto &elt : m_vertices)
+            elt.second.pre_update();
+
+        for (auto &elt : m_edges)
+            elt.second.pre_update();
+    }
+
+    if(m_interface->m_kconnex.clicked()) //bouton k-connexe
+    {
+        Is_Connexe();
+        for (auto &elt : m_vertices)
+            elt.second.pre_update();
+
+        for (auto &elt : m_edges)
+            elt.second.pre_update();
     }
 
     for (auto &elt : m_vertices)
@@ -605,7 +617,8 @@ void Graph::Supprimer ()
             test_remove_edge(num);
         }
 
-    } while((choix != "sommet") && (choix != "arc"));
+    }
+    while((choix != "sommet") && (choix != "arc"));
 }
 
 
@@ -613,8 +626,8 @@ void Graph::Supprimer ()
 /// Méthode pour sauvegarder un graphe
 void Graph::Sauvegarde()
 {
-        save_edge();
-        save_vertex();
+    save_edge();
+    save_vertex();
 
 }
 
@@ -624,16 +637,16 @@ void Graph::Ajouter()
     string x;
 
 
-        std::cout<<"Que voulez vous ajouter ? (sommet ou arc)" << endl;
-        cin >> x;
-        if (x=="sommet")
-        {
-            Add_Vertices();
-        }
-        if(x=="arc")
-        {
-           Add_Edge();
-        }
+    std::cout<<"Que voulez vous ajouter ? (sommet ou arc)" << endl;
+    cin >> x;
+    if (x=="sommet")
+    {
+        Add_Vertices();
+    }
+    if(x=="arc")
+    {
+        Add_Edge();
+    }
 }
 
 
@@ -664,9 +677,11 @@ void Graph::Add_Edge()
         if (m_edges.count(n)==1)
             n++;
 
-        else x=true;
+        else
+            x=true;
 
-    } while(!x);
+    }
+    while(!x);
 
     do
     {
@@ -675,7 +690,8 @@ void Graph::Add_Edge()
         std::cout << "Choisir votre sommet 2 : " << std::endl;
         std::cin >> som2;
 
-    }while((som1 == som2));
+    }
+    while((som1 == som2));
 
     do
     {
@@ -692,7 +708,8 @@ void Graph::Add_Edge()
         std::cout << "2 - Neutre" << std::endl;
         std::cin >> signe;
 
-    }while((signe!=0) && (signe!=1) && (signe!=2));
+    }
+    while((signe!=0) && (signe!=1) && (signe!=2));
 
     add_interfaced_edge(n, som1, som2, signe, poids); // Ajouter une arete
 }
@@ -711,7 +728,6 @@ void Graph::test_remove_edge(int eidx)
 }
 
 /// Méthode pour supprimer un sommet
-/// Méthode pour supprimer un sommet
 void Graph::test_remove_vertex(int vidx)
 {
     std::map<int, Edge>::iterator it;
@@ -723,7 +739,6 @@ void Graph::test_remove_vertex(int vidx)
     {
         m_interface->m_main_box.remove_child (m_vertices[vidx].m_interface->m_top_box);
         it2 = m_vertices.find(vidx);
-        //m_vertices.erase(it2);
 
         for (unsigned int i=0 ; i<m_edges.size() ; i++)
         {
@@ -735,7 +750,6 @@ void Graph::test_remove_vertex(int vidx)
                 if (m_interface && m_edges[i].m_interface)
                     m_interface->m_main_box.remove_child( m_edges[i].m_interface->m_top_edge );
 
-                //m_edges.erase(it);
                 cout << "on a supprime arete " << i << endl;
             }
         }
@@ -758,6 +772,182 @@ void Graph::Erase()
     }
 }
 
+void Graph::Fortementconnexe(Graph *g)
+{
+    if (m_choixGraphe==1)
+    {
+
+        int SommetTOT = 5;
+        Graphe ge(SommetTOT); ///initialisation du graphe G à 5 sommets
+
+        ge.addEdge(0, 1);     ///ajout des aretes
+        ge.addEdge(1, 2);
+        ge.addEdge(2, 3);
+        ge.addEdge(3, 0);
+        ge.addEdge(2, 4);
+
+        cout << "Les composantes fortement connexes sont :" << std::endl;
+
+        ge.SCC(g);
+    }
+    if (m_choixGraphe == 2)
+    {
+        int SommetTOT=12;
+        // Create a graph given in the above diagram
+        Graphe ge(SommetTOT);
+        ge.addEdge(4, 0);
+        ge.addEdge(4, 1);
+        ge.addEdge(3, 0);
+        ge.addEdge(11, 3);
+        ge.addEdge(11, 4);
+        ge.addEdge(2, 1);
+        ge.addEdge(9, 10);
+        ge.addEdge(9, 4);
+        ge.addEdge(8, 7);
+        ge.addEdge(7, 6);
+        ge.addEdge(6, 5);
+        ge.addEdge(5, 2);
+        ge.addEdge(9, 8);
+        ge.addEdge(10, 2);
+        cout << "Les composantes fortement connexes sont :" << std::endl;
+
+        ge.SCC(g);
+    }
+    if (m_choixGraphe == 3)
+    {
+        int SommetTOT=14;
+        // Create a graph given in the above diagram
+        Graphe ge(SommetTOT);
+        ge.addEdge(4, 0);
+        ge.addEdge(5, 0);
+        ge.addEdge(3, 1);
+        ge.addEdge(6, 0);
+        ge.addEdge(6, 1);
+        ge.addEdge(6, 2);
+        ge.addEdge(6, 3);
+        ge.addEdge(7, 0);
+        ge.addEdge(8, 0);
+        ge.addEdge(8, 1);
+        ge.addEdge(8, 2);
+        ge.addEdge(8, 3);
+        ge.addEdge(11, 9);
+        ge.addEdge(11, 10);
+        ge.addEdge(11, 4);
+        ge.addEdge(11, 5);
+        ge.addEdge(11, 6);
+        ge.addEdge(11, 7);
+        ge.addEdge(11, 8);
+        ge.addEdge(11, 12);
+        ge.addEdge(11, 13);
+
+        cout << "Les composantes fortement connexes sont :" << std::endl;
+        ge.SCC(g);
+    }
+}
+
+void Graph::reduit(int ind) //fonction pour créer le graphe réduit lié aux composantes fortement connexes
+{
+    for (unsigned int i=0 ; i < m_edges.size() ; i++)
+    {
+        if ((m_edges[i].m_to == ind)||(m_edges[i].m_from == ind))
+        {
+
+            /// test : on a bien des éléments interfacés
+            if (m_interface && m_edges[i].m_interface)
+                m_interface->m_main_box.remove_child(m_edges[i].m_interface->m_top_edge );
+
+            cout << "on a supprime arete " << i << endl;
+        }
+    }
+}
+
+void Graph::Is_Connexe()
+{
+    if (m_choixGraphe==1) //Pour le graphe Bacteries
+    {
+
+        int SommetTOT=4;
+        Graphe g(SommetTOT); ///initialisation du graphe G à 5 sommets
+        g.addEdge(3, 0);     //aretes qui ne compte pas le sommet k-connexe
+        g.addEdge(0, 1);
+
+        int nb_sommet = check_connex(g.adj); //nb_sommet prend la valeur de la taille de la liste contenant les aretes
+        if (nb_sommet == 1) //si la liste contient un nombre different de 4 alors on peut déconnecter ce graphe pour le rendre non connexe
+        {
+          std::cout << "Le sommet 2 peut etre retire pour rendre le graphe non connexe" << std::endl;
+          test_remove_vertex(2); //On supprime le sommet qu'on peut enlever pour montrer que le graphe est devenu non connexe
+        }
+        else
+        {
+            std::cout << "Le sommet 2 ne peut etre retire car le graphe est toujours connexe." << std::endl;
+        }
+    }
+    if (m_choixGraphe==2)
+    {
+        int SommetTOT=12;
+        Graphe g(SommetTOT);
+        g.addEdge(3, 0);
+        g.addEdge(11, 3);
+        g.addEdge(2, 1);
+        g.addEdge(9, 10);
+        g.addEdge(8, 7);
+        g.addEdge(7, 6);
+        g.addEdge(6, 5);
+        g.addEdge(5, 2);
+        g.addEdge(9, 8);
+        g.addEdge(10, 2);
+
+        int nb_sommet = check_connex(g.adj);
+        if (nb_sommet == 0)
+        {
+          std::cout << "Le sommet 4 peut etre retire pour rendre le graphe non connexe" << std::endl;
+          test_remove_vertex(4);
+        }
+        else
+        {
+            std::cout << "Le sommet 4 ne peut etre retire car le graphe est toujours connexe." << std::endl;
+        }
+    }
+    if (m_choixGraphe==3)
+    {int SommetTOT=14;
+        // Create a graph given in the above diagram
+        Graphe g(SommetTOT);
+        g.addEdge(4, 0);
+        g.addEdge(5, 0);
+        g.addEdge(3, 1);
+        g.addEdge(6, 0);
+        g.addEdge(6, 1);
+        g.addEdge(6, 2);
+        g.addEdge(6, 3);
+        g.addEdge(7, 0);
+        g.addEdge(8, 0);
+        g.addEdge(8, 1);
+        g.addEdge(8, 2);
+        g.addEdge(8, 3);
+
+        int nb_sommet = check_connex(g.adj);
+        if (nb_sommet == 0)
+        {
+          std::cout << "Le sommet 11 peut etre retire pour rendre le graphe non connexe" << std::endl;
+          test_remove_vertex(11);
+        }
+        else
+        {
+            std::cout << "Le sommet 11 ne peut etre retire car le graphe est toujours connexe." << std::endl;
+        }
+    }
+
+}
+
+int Graph::check_connex(list<int> *adj)
+{
+    return adj->size(); //retourne la valeur que prend la liste d'aretes
+}
+
+//------------------------------------------------------------------------------------------------------------------------
+// CLASS GRAPHE
+//------------------------------------------------------------------------------------------------------------------------
+
 ///constructeur
 Graphe::Graphe(int V)
 {
@@ -765,40 +955,39 @@ Graphe::Graphe(int V)
     adj = new list<int>[V];
 }
 
+///Fonction qui ajoute une arête (création)
+void Graphe::addEdge(int v, int w)
+{
+    adj[v].push_back(w);
+}
+
+
 ///affichage du resultat du DFS à partir d'un sommet V
-void Graphe::DFS(int v, bool visited[])
+int Graphe::DFS(int v, bool visited[])
 {
     ///Marquage du sommet comme visité et affichage
     visited[v] = true;
     cout << v << " ";
+    m_compo++;
 
     ///Marquage des sommets adjacents au sommet marqué
     list<int>::iterator i;
     for (i = adj[v].begin(); i != adj[v].end(); ++i)
         if (!visited[*i])
             DFS(*i, visited);
+
+    if(m_compo==1)
+    {
+        m_compo=0;
+        return v;
+    }
+    else if(m_compo != 1)
+    {
+        m_compo=0;
+        return -1;
+    }
 }
 
-Graphe Graphe::Renverser()
-{
-    ///creation d'un graphe bis que l'on va transposer
-    Graphe g(V);
-    for (int v = 0; v < V; v++)
-    {
-        ///Transforme l'arete u -> v en v -> u
-        list<int>::iterator i;
-        for(i = adj[v].begin(); i != adj[v].end(); ++i)
-        {
-            g.adj[*i].push_back(v);
-        }
-    }
-    return g; ///retourne le graphe transposer
-}
-///Fonction qui ajoute une arête (création)
-void Graphe::addEdge(int v, int w)
-{
-    adj[v].push_back(w);
-}
 ///Fonction de marquage lors du passage du DFS
 void Graphe::marquageDFS(int v, bool visited[], stack<int> &Stack)
 {
@@ -816,11 +1005,11 @@ void Graphe::marquageDFS(int v, bool visited[], stack<int> &Stack)
 }
 
 ///Fonction principale qui trouve les compo fortement connexes
-void Graphe::SCC()
+void Graphe::SCC(Graph *g)
 {
     stack<int> Stack;
 
-///Marque tous les sommets comme non visités
+    ///Marque tous les sommets comme non visités
     bool *visited = new bool[V];
     for(int i = 0; i < V; i++)
         visited[i] = false;
@@ -847,80 +1036,31 @@ void Graphe::SCC()
         ///Affichage des compo connexes
         if (visited[v] == false)
         {
-            gr.DFS(v, visited);
+            int sommet = gr.DFS(v, visited);
+            if(sommet != -1)
+            {
+                std::cout << "sommet : " << sommet << std::endl;
+
+                g->reduit(sommet);
+            }
+
             cout << endl;
         }
     }
 }
-void Graph::Fortementconnexe()
 
+Graphe Graphe::Renverser()
 {
-    if (m_choixGraphe==1)
+    ///creation d'un graphe bis que l'on va transposer
+    Graphe g(V);
+    for (int v = 0; v < V; v++)
     {
-
-    int SommetTOT=5;
-    Graphe g(SommetTOT); ///initialisation du graphe G à 5 sommets
-    g.addEdge(0, 1);     ///ajout des aretes
-    g.addEdge(1, 2);
-    g.addEdge(2, 3);
-    g.addEdge(3, 0);
-    g.addEdge(2, 4);
-
-     cout << "Les composantes fortement connexes sont :";
-
-    g.SCC();
+        ///Transforme l'arete u -> v en v -> u
+        list<int>::iterator i;
+        for(i = adj[v].begin(); i != adj[v].end(); ++i)
+        {
+            g.adj[*i].push_back(v);
+        }
     }
- if (m_choixGraphe == 2)
-    {
-       int SommetTOT=12;
-    // Create a graph given in the above diagram
-    Graphe g(SommetTOT);
-    g.addEdge(4, 0);
-    g.addEdge(4, 1);
-    g.addEdge(3, 0);
-    g.addEdge(11, 3);
-    g.addEdge(11, 4);
-    g.addEdge(2, 1);
-    g.addEdge(9, 10);
-    g.addEdge(9, 4);
-    g.addEdge(8, 7);
-    g.addEdge(7, 6);
-    g.addEdge(6, 5);
-    g.addEdge(5, 2);
-    g.addEdge(9, 8);
-    g.addEdge(10, 2);
-      cout << "Les composantes fortement connexes sont :";
-
-    g.SCC();
-    }
-if (m_choixGraphe == 3)
-    {
-       int SommetTOT=14;
-    // Create a graph given in the above diagram
-    Graphe g(SommetTOT);
-    g.addEdge(4, 0);
-    g.addEdge(5, 0);
-    g.addEdge(3, 1);
-    g.addEdge(6, 0);
-    g.addEdge(6, 1);
-    g.addEdge(6, 2);
-    g.addEdge(6, 3);
-    g.addEdge(7, 0);
-    g.addEdge(8, 0);
-    g.addEdge(8, 1);
-    g.addEdge(8, 2);
-    g.addEdge(8, 3);
-    g.addEdge(11, 9);
-    g.addEdge(11, 10);
-    g.addEdge(11, 4);
-    g.addEdge(11, 5);
-    g.addEdge(11, 6);
-    g.addEdge(11, 7);
-    g.addEdge(11, 8);
-    g.addEdge(11, 12);
-    g.addEdge(11, 13);
-
- cout << "Les composantes fortement connexes sont :";
-    g.SCC();
-    }
+    return g; ///retourne le graphe transposer
 }

@@ -1,7 +1,7 @@
 #include "grman/grman.h"
 #include <iostream>
-
 #include "graph.h"
+
 ///Sous-programme du menu principale
 
 void menu (BITMAP* ecran, BITMAP* bienvenue, BITMAP* bacteries,BITMAP* cycle, BITMAP* savane, BITMAP* quitter, bool fin, Graph *g, bool *ok)
@@ -117,7 +117,7 @@ int main()
         while ( (!key[KEY_ESC]) && ok )
         {
             /// Il faut appeler les méthodes d'update des objets qui comportent des widgets
-            g.update(&ok);
+            g.update(&ok, &g);
 
             /// Mise à jour générale (clavier/souris/buffer etc...)
             grman::mettre_a_jour();

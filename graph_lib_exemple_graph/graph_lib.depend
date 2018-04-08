@@ -59,17 +59,20 @@
 	<iostream>
 	"graph.h"
 
-1523021497 source:c:\users\patrick dreyfus\desktop\pp\graph_lib_exemple_graph\graph.cpp
+1523211505 source:c:\users\patrick dreyfus\desktop\pp\graph_lib_exemple_graph\graph.cpp
 	"graph.h"
 	<fstream>
 	<string>
 
-1523021299 c:\users\patrick dreyfus\desktop\pp\graph_lib_exemple_graph\graph.h
+1523211465 c:\users\patrick dreyfus\desktop\pp\graph_lib_exemple_graph\graph.h
 	<vector>
 	<map>
 	<string>
 	<memory>
 	"grman/grman.h"
+	<list>
+	<stack>
+	<fstream>
 
 1522835718 c:\users\patrick dreyfus\desktop\pp\graph_lib_exemple_graph\grman\grman.h
 	<allegro.h>
@@ -111,7 +114,7 @@
 1522835718 source:c:\users\patrick dreyfus\desktop\pp\graph_lib_exemple_graph\grman\widget.cpp
 	"widget.h"
 
-1523021187 source:c:\users\patrick dreyfus\desktop\pp\graph_lib_exemple_graph\main.cpp
+1523209128 source:c:\users\patrick dreyfus\desktop\pp\graph_lib_exemple_graph\main.cpp
 	"grman/grman.h"
 	<iostream>
 	"graph.h"
