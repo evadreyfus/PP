@@ -1,7 +1,7 @@
 #include "grman/grman.h"
 #include <iostream>
-#include "graph.h"
 
+#include "graph.h"
 ///Sous-programme du menu principale
 
 void menu (BITMAP* ecran, BITMAP* bienvenue, BITMAP* bacteries,BITMAP* cycle, BITMAP* savane, BITMAP* quitter, bool fin, Graph *g, bool *ok)
@@ -13,7 +13,7 @@ void menu (BITMAP* ecran, BITMAP* bienvenue, BITMAP* bacteries,BITMAP* cycle, BI
     while (!fin && v == 0) //tant qu'on est dans la boucle intérative
     {
 
-        blit(bienvenue,ecran,0,0,0,0,800,600); //on affiche le menu qui est l'écran principale
+        blit(bienvenue,ecran,0,0,0,0,1024,768); //on affiche le menu qui est l'écran principale
 
         if (mouse_x>=18 && mouse_x<=189 && mouse_y>=268 && mouse_y<=333) //si la souris se trouvent dans cette zone
         {
@@ -63,7 +63,7 @@ void menu (BITMAP* ecran, BITMAP* bienvenue, BITMAP* bacteries,BITMAP* cycle, BI
             }
         }
 
-        blit(ecran,screen,0,0,0,0,800,600);
+        blit(ecran,screen,0,0,0,0,1024,768);
 
         if(v == 1)
         {
@@ -117,7 +117,7 @@ int main()
         while ( (!key[KEY_ESC]) && ok )
         {
             /// Il faut appeler les méthodes d'update des objets qui comportent des widgets
-            g.update(&ok, &g);
+            g.update(&ok);
 
             /// Mise à jour générale (clavier/souris/buffer etc...)
             grman::mettre_a_jour();

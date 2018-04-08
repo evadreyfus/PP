@@ -203,6 +203,15 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
     m_kconnex_image.set_pic_name("kconnex.jpg");
     m_kconnex.add_child(m_kconnex_image);
     m_kconnex_box.add_child(m_kconnex);
+
+    //Déclaration de la box contenant le bouton Simulation
+    m_main_box.add_child(m_simulation_box);
+    m_simulation_box.set_pos(800,70);
+    m_simulation_box.set_dim(80,80);
+    m_simulation.set_dim(40,15);
+    m_simulation_image.set_pic_name("simulation.jpg");
+    m_simulation.add_child(m_simulation_image);
+    m_simulation_box.add_child(m_simulation);
 }
 
 
@@ -455,6 +464,18 @@ void Graph::update(bool *ok, Graph *g)
 
         for (auto &elt : m_edges)
             elt.second.pre_update();
+    }
+
+    if(m_interface->m_simulation.clicked())
+    {
+
+        testpopulation();
+        for (auto &elt : m_vertices)
+            elt.second.pre_update();
+
+        for (auto &elt : m_edges)
+            elt.second.pre_update();
+
     }
 
     for (auto &elt : m_vertices)
@@ -944,6 +965,34 @@ int Graph::check_connex(list<int> *adj)
     return adj->size(); //retourne la valeur que prend la liste d'aretes
 }
 
+void Graph::testpopulation()
+{
+    double coef_K; ///coefficient de portage
+    double coef_R=0.1; ///coefficient __ rythme de croissance
+
+    cout<<"Vous avez active la simulation, changez les valeurs de vos populations "<<endl;
+    cout<<" et des arcs et recliquez pour voir leur evolution."<<endl;
+
+    for (auto& elem : m_vertices) ///parcourt la map sommet
+    {
+        for (const auto& elem2: elem.second.m_in) ///parcourt les predecesseurs du sommet
+        {
+            for (const auto& elem3: m_edges) ///parcourt les aretes
+            {
+                coef_K+= 0.0002*elem3.second.m_weight*m_vertices[elem2].m_value/7; ///calcul du portage
+            }
+        }
+        if (elem.second.m_value > 0) ///tant que c'est superieur a 0
+        {
+            double inter= elem.second.m_value/coef_K;
+            double inter1= 1 - inter;
+            double inter2= elem.second.m_value*inter1;
+            double inter3= coef_R*inter2;
+            elem.second.m_value = elem.second.m_value+inter3; ///La population evolue
+        }
+    }
+}
+
 //------------------------------------------------------------------------------------------------------------------------
 // CLASS GRAPHE
 //------------------------------------------------------------------------------------------------------------------------
@@ -1064,3 +1113,5 @@ Graphe Graphe::Renverser()
     }
     return g; ///retourne le graphe transposer
 }
+
+

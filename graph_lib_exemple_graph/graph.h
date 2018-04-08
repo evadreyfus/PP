@@ -335,6 +335,15 @@ private :
     //bouton K-Connexe
     grman::WidgetButton m_kconnex;
 
+    //Boite contenant le bouton Connexe
+    grman::WidgetBox m_simulation_box;
+
+    //image du bouton connexe
+    grman::WidgetImage m_simulation_image;
+
+    //bouton Connexe
+    grman::WidgetButton m_simulation;
+
 
 
 public :
@@ -410,6 +419,9 @@ public:
 
     /// Fonction fortement connexe
     void Fortementconnexe(Graph *g);
+
+    ///Fonction simulation
+    void testpopulation();
 
     /// Supprimer les aretes pour le graphe reduit
     void reduit(int ind);
