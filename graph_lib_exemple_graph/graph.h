@@ -292,7 +292,6 @@ private :
     //bouton SAVE
     grman::WidgetButton m_sauv;
 
-
     //une boite contenant un bouton sauv
     grman::WidgetBox m_sauv_box;
 
@@ -372,8 +371,8 @@ private :
     std::shared_ptr<GraphInterface> m_interface = nullptr;
 
     ///Nbre de sommet total
-
     int V;
+
     ///liste des sommets adjacents
     list<int> *adj;
 

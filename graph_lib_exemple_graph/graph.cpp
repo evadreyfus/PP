@@ -228,11 +228,9 @@ GraphInterface::GraphInterface(int x, int y, int w, int h)
 void Graph::loadgraphe(int m_choixgraphe)
 {
     m_interface = std::make_shared<GraphInterface>(50, 0, 750, 600);
-    // La ligne précédente est en gros équivalente à :
-    // m_interface = new GraphInterface(50, 0, 750, 600);
 
-    int m_sommet;
-    int m_poids;
+    int m_sommet; ///nombre de sommet
+    int m_poids; ///poids de l'arete
     int m_pos1;
     int m_pos2;
     string m_nom;
@@ -250,29 +248,28 @@ void Graph::loadgraphe(int m_choixgraphe)
     case 1:
     {
 
-        fichier1 = "sommet1.txt";
-        fichier2 = "edge1.txt";
-        ifstream newfichier(fichier1, ios::in);
+        fichier1 = "sommet1.txt"; ///fichier sommet 1
+        fichier2 = "edge1.txt"; ///fichier edge 1
+        ifstream newfichier(fichier1, ios::in); ///lecture du fichier
         if(newfichier)
         {
             //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
-            newfichier >> nbSommets;
-            std::cout << nbSommets << std::endl;
+            newfichier >> nbSommets; /// le fichier lit la premiere valeur
+            std::cout << nbSommets << std::endl; ///affichage du nombre de sommets
 
             for(int i=0; i<nbSommets; i++)
             {
                 newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
                 std::cout << " " << m_sommet << " " << m_poids << " " << m_pos1 << " " << m_pos2 << " " << m_nom;
                 image = m_nom+".jpg";
-                // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
-
+///creation du sommet dans l'interface allegro
                 add_interfaced_vertex(m_sommet, m_poids, m_pos1, m_pos2, image);
             }
             newfichier.close();
         }
         else
             std::cout << "Erreur lors du chargement du fichier..." << std::endl;
-
+///meme chose pour les aretes
         ifstream nouveaufichier(fichier2, ios :: in);
         if(nouveaufichier)
         {
@@ -299,7 +296,6 @@ void Graph::loadgraphe(int m_choixgraphe)
         ifstream newfichier(fichier1, ios::in);
         if(newfichier)
         {
-            //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
             newfichier >> nbSommets;
             std::cout << nbSommets << std::endl;
 
@@ -308,8 +304,7 @@ void Graph::loadgraphe(int m_choixgraphe)
                 newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
                 std::cout << " " << m_sommet << " " << m_poids << " " << m_pos1 << " " << m_pos2 << " " << m_nom;
                 image = m_nom+".jpg";
-                // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
-
+///creation du sommet dans l'interface allegro
                 add_interfaced_vertex(m_sommet, m_poids, m_pos1,m_pos2, image);
             }
             newfichier.close();
@@ -345,7 +340,6 @@ void Graph::loadgraphe(int m_choixgraphe)
 
         if(newfichier)
         {
-            //on cherche ici a recuperer les donnees ordre et nbre d'aretes du fichier
             newfichier >> nbSommets;
             std::cout << nbSommets << std::endl;
 
@@ -354,7 +348,7 @@ void Graph::loadgraphe(int m_choixgraphe)
                 newfichier >>  m_sommet >> m_poids >> m_pos1 >> m_pos2 >> m_nom;
                 std::cout << " " << m_sommet << " " << m_poids << " " << m_pos1 << " " << m_pos2 << " " << m_nom;
                 image = m_nom+".jpg";
-                // Ajouter le sommet d'indice 0 de valeur 30 en x=200 et y=100 avec l'image clown1.jpg etc...
+///creation du sommet dans l'interface allegro
 
                 add_interfaced_vertex(m_sommet, m_poids, m_pos1,m_pos2, image);
             }
